@@ -6,12 +6,15 @@ var cors = require('cors')
 
 
 const mariadb = require('mariadb');
+//Create connection with mariadb
+//Each user will need to enter in their username, database, and password
+//These are left blank
 const pool = mariadb.createPool({
      host: 'localhost', 
      port: 3306,
-     user:'ama84874', 
-     database:'ama84874',
-     password: 'Eagles_02',
+     user:'', 
+     database:'',
+     password: '',
      connectionLimit: 5
 });
 
@@ -46,7 +49,7 @@ app.get('/api/query', async (req, res, next) => {
         try {
           conn = await pool.getConnection();
           const rows = await conn.query(req.headers.query);
-          console.log(JSON.stringify(rows));
+          //console.log(JSON.stringify(rows));
           res.send(JSON.stringify(rows));
         } catch (err) {
           throw err;
