@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ClientService } from 'src/app/services/clients.service';
 
 @Component({
-  selector: 'app-request-panel',
   templateUrl: './request-panel.component.html',
   styleUrls: ['./request-panel.component.scss'],
 })

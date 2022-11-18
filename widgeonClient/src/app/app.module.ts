@@ -9,6 +9,10 @@ import { ClientService } from './services/clients.service';
 import { ResultsPanelComponent } from './components/results-panel/results-panel.component';
 import { ResultItemComponent } from './components/result-item/result-item.component';
 import { RequestPanelComponent } from './components/request-panel/request-panel.component';
+import { AddPageComponent } from './components/add-page/add-page.component';
+import { EditPageComponent } from './components/edit-page/edit-page.component';
+import { DeletePageComponent } from './components/delete-page/delete-page.component';
+import { ReportsPageComponent } from './components/reports-page/reports-page.component';
 
 @NgModule({
   declarations: [
@@ -16,6 +20,10 @@ import { RequestPanelComponent } from './components/request-panel/request-panel.
     ResultsPanelComponent,
     ResultItemComponent,
     RequestPanelComponent,
+    AddPageComponent,
+    EditPageComponent,
+    DeletePageComponent,
+    ReportsPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [ClientService],

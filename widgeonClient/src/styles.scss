@@ -1,48 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
-$A: #35a8db;
-$B: #25779c;
-$C: #495075;
-$D: #16465c;
 
 body {
-  background-color: #495075;
-  color: #fff;
   font-family: "Consolas", sans-serif;
-}
-
-button {
-  box-sizing: border-box;
-  background-color: $B;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-self: center;
-  font-size: 1rem;
-  font-weight: 100;
-  line-height: 1;
-  padding: 0.5em 1em;
-  text-align: center;
-  text-transform: uppercase;
-  font-weight: 700;
-  font-family: "Consolas", sans-serif;
-
-  border-color: $B;
-  color: #fff;
-  box-shadow: 0 0 40px 40px $B inset, 0 0 0 0 $B;
-  transition: all 150ms ease-in-out;
-
-  &:hover {
-    color: #000;
-    box-shadow: 0 0 10px 0 $B inset, 0 0 4px 2px $B;
-  }
-}
-
-input {
-  padding: 0.25em;
-  border-radius: 4px;
-  max-height: 1em;
-  margin: 0.25em;
-  margin-bottom: 0.35em;
 }
 
 .flex-container {
