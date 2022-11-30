@@ -1,0 +1,27 @@
+<div class="flex-container">
+    <ul class="nav">
+        <li>
+            <img src="https://www.birdorable.com/img/bird/th440/eurasian-wigeon.png" width="50" height="50">
+        </li>
+        <li [ngClass]="{'active': current == 'add'}">
+            <a (click)="goToAdd()">Add</a>
+        </li>
+        <li [ngClass]="{'active': current == 'edit'}">
+            <a (click)="goToEdit()">Edit</a>
+        </li>
+        <li [ngClass]="{'active': current == 'delete'}">
+            <a (click)="goToDelete()">Delete</a>
+        </li>
+        <li [ngClass]="{'active': current == 'reports'}">
+            <a (click)="goToReports()">Reports</a>
+        </li>
+        <li [ngClass]="{'active': current == 'request'}">
+            <a (click)="goToRequest()">Request</a>
+        </li>
+        <li>
+            <a>Time Warp!!!</a>
+        </li>
+    </ul>
+</div>
+
+<router-outlet></router-outlet>

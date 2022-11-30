@@ -1,0 +1,126 @@
+<div class="flex-container">
+  <select [(ngModel)]="currentType">
+    <option value="instructor">Add Instructor</option>
+    <option value="course">Add Course</option>
+    <option value="courseSection">Add Course Section</option>
+    <option value="nonInstruct">Add Non-Instructional Load</option>
+  </select>
+</div>
+
+<!-- Add Instructor Form -->
+<div *ngIf="currentType == 'instructor'">
+  <h2>Add Instructor</h2>
+  <div class="form-container">
+    <app-input-field
+      label="First Name:"
+      [(data)]="instructor.fName"
+    ></app-input-field>
+    <app-input-field
+      label="Last Name:"
+      [(data)]="instructor.lName"
+    ></app-input-field>
+    <app-input-field
+      label="Email:"
+      [(data)]="instructor.email"
+    ></app-input-field>
+    <app-input-field
+      label="Desired Load:"
+      [(data)]="instructor.desiredLoad"
+    ></app-input-field>
+  </div>
+</div>
+
+<!-- Add Course Form -->
+<div *ngIf="currentType == 'course'">
+  <h2>Add Course</h2>
+  <div class="form-container">
+    <app-input-field
+      label="Course Title:"
+      [(data)]="course.title"
+    ></app-input-field>
+    <app-input-field label="Course ID:" [(data)]="course.id"></app-input-field>
+    <app-input-field
+      label="Department:"
+      [(data)]="course.department"
+    ></app-input-field>
+    <app-input-field
+      label="Number of Credits:"
+      [(data)]="course.numCredits"
+    ></app-input-field>
+  </div>
+</div>
+
+<!-- Add Section Form -->
+<div *ngIf="currentType == 'courseSection'">
+  <h2>Add Course Section</h2>
+  <div class="form-container">
+    <app-input-field
+      label="Course ID:"
+      [(data)]="courseSection.id"
+    ></app-input-field>
+    <app-input-field
+      label="Section Number:"
+      [(data)]="courseSection.sectionNum"
+    ></app-input-field>
+    <app-input-field
+      label="Class Mod:"
+      [(data)]="courseSection.classMod"
+    ></app-input-field>
+    <app-input-field
+      label="Semester:"
+      [(data)]="courseSection.semester"
+    ></app-input-field>
+    <app-input-field
+      label="Year:"
+      [(data)]="courseSection.year"
+    ></app-input-field>
+  </div>
+</div>
+
+<!-- Add Non Instructional Load Form -->
+<div *ngIf="currentType == 'nonInstruct'">
+  <h2>Add Non-Instructional Load</h2>
+  <div class="form-container">
+    <app-input-field
+      label="Task:"
+      [(data)]="nonInstruct.task"
+    ></app-input-field>
+    <app-input-field
+      label="Instructor ID:"
+      [(data)]="nonInstruct.instructorId"
+    ></app-input-field>
+    <app-input-field
+      label="Non-Instructional TEU:"
+      [(data)]="nonInstruct.nonInstructTeu"
+    ></app-input-field>
+    <app-input-field
+      label="Semester:"
+      [(data)]="nonInstruct.semester"
+    ></app-input-field>
+    <app-input-field
+      label="Year:"
+      [(data)]="nonInstruct.year"
+    ></app-input-field>
+  </div>
+</div>
+
+<input type="button" value="Submit" (click)="add()" />
+<label>{{ indicator }}</label>
+
+<br />
+<label *ngIf="currentType == 'instructor'">
+  {{ getInstructor() }}
+</label>
+<label *ngIf="currentType == 'course'">
+  {{ getCourse() }}
+</label>
+<label *ngIf="currentType == 'courseSection'">
+  {{ getCourseSection() }}
+</label>
+<label *ngIf="currentType == 'nonInstruct'">
+  {{ getNonInstruct() }}
+</label>
+<br />
+<label>
+  {{ getResponse() }}
+</label>
