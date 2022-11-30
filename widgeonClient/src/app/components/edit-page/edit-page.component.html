@@ -1,1 +1,14 @@
-<p>edit-page works!</p>
+<div class="flex-container">
+    <input type="button" value="Get Sections" (click)="getSections()">
+
+   
+</div>
+
+<div class="flex-container">
+    <div *ngIf="data!=null">
+        <app-results-panel [resultsObject]="data"></app-results-panel>
+    </div>
+    <div *ngIf="data==null">
+        No Data!
+    </div>
+</div>

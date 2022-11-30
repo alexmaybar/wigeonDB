@@ -13,6 +13,7 @@ import { AddPageComponent } from './components/add-page/add-page.component';
 import { EditPageComponent } from './components/edit-page/edit-page.component';
 import { DeletePageComponent } from './components/delete-page/delete-page.component';
 import { ReportsPageComponent } from './components/reports-page/reports-page.component';
+import { InputFieldComponent } from './components/input-field/input-field.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { ReportsPageComponent } from './components/reports-page/reports-page.com
     EditPageComponent,
     DeletePageComponent,
     ReportsPageComponent,
+    InputFieldComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [ClientService],
