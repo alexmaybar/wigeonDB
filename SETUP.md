@@ -22,6 +22,8 @@ Similarily, you will need to download the npm requrements for the widgeonClient.
 >
 > `npm install`
 
+ANGULAR CLI HERE
+
 ## SSH Tunnel
 
 Next, to access MariaDB you need to open a weibie2 connection in `cmd` to the port 3306

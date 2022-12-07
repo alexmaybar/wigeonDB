@@ -1,0 +1,14 @@
+label {
+  margin: 0.5em;
+  display: inline-block;
+  width: 150px;
+}
+
+app-input-field:nth-child(odd) {
+  background-color: rgba(128, 128, 128, 0.6);
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
