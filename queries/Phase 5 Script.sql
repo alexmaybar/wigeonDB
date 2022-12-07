@@ -107,7 +107,10 @@ VALUES
     ('wilkin@bethel.edu', 'Kinney', 'William', 23.5),
     ('huben@bethel.edu', 'Shull', 'Ben', 18.4),
     ('alebar@bethel.edu', 'Aybar', 'Alex', 21.7),
-    ('rutliv@bethel.edu', 'Livingston', 'Ruth', 23.8);
+    ('rutliv@bethel.edu', 'Livingston', 'Ruth', 23.8),
+    ('isakub@bethel.edu', 'Kubas', 'Isaac', 23.8),
+    ('benderson@bethel.edu', 'Anderson', 'Ben', 23.8),
+    ('wesmin@bethel.edu', 'Minshull', 'Weston', 23.6);
 
   INSERT IGNORE INTO Course (course_id, department, course_title, num_credits)
   VALUES
@@ -141,7 +144,10 @@ VALUES
       (4290, 'Math', 'Introduction to History', 3),
       (4320, 'Math', 'History and the Human Environment', 3),
       (4324, 'Math', 'Human Rights in International History', 3),
-      (4333, 'Math', 'History of Crime and Punishment', 3);
+      (4333, 'Math', 'History of Crime and Punishment', 3),
+      (4460, 'Math', 'History of Mathematics', 4),
+      (4500, 'Math', 'Methamatics of the 21st Century', 2),
+      (4600, 'Math', 'Discrete Algorithm Structures', 4);
 
 INSERT IGNORE INTO Section (section_id, semester, section_num, year, course_id, class_mod)
 VALUES
