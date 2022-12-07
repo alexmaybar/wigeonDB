@@ -12,9 +12,9 @@ const { Console } = require("console");
 const pool = mariadb.createPool({
   host: "localhost",
   port: 3306,
-  user: "ama84874",
-  database: "wigeon",
-  password: "Eagles_02",
+  user: "bea54577",
+  database: "bea54577",
+  password: "Chuckboi1!",
   connectionLimit: 5,
 });
 
