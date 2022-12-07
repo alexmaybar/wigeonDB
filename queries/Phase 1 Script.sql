@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(2),
 	start_time TIME,
