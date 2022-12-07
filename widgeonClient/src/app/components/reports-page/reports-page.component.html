@@ -9,7 +9,7 @@
 <h1>Reports</h1>
 <div>
     <h3>Course Offerings and their assigned Instructor</h3>
-    <p>The result of a query</p>
+    <app-results-panel [resultsObject]="reportCourseInstructorPair"></app-results-panel>
 </div>
 
 <div>
@@ -19,7 +19,7 @@
 
 <div>
     <h3>Courses that have not been assigned an Instructor</h3>
-    <p>The result of a query</p>
+    <app-results-panel [resultsObject]="reportCourseWithNoInstructor"></app-results-panel>
 </div>
 
 <div>
@@ -29,7 +29,7 @@
 
 <div>
     <h3>Course offerings without an assigned time</h3>
-    <app-results-panel [resultsObject]="reportCourseOfferingTime"></app-results-panel>
+    <app-results-panel [resultsObject]="reportCourseWithNoTime"></app-results-panel>
 </div>
 
 <div>

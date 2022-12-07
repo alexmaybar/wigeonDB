@@ -11,6 +11,8 @@ export class ReportsPageComponent implements OnInit {
   reportCourseOfferingTime: any = null;
   reportCourseWithNoTime: any = null;
   reportInstructorTimes: any = null;
+  reportCourseInstructorPair: any = null;
+  reportCourseWithNoInstructor: any = null;
   data: any = null;
 
 
@@ -18,6 +20,8 @@ export class ReportsPageComponent implements OnInit {
     this.getCourseOfferingTime();
     this.getCourseWithNoTime();
     this.getInstructorTimes();
+    this.getCourseInstructorPair();
+    this.getCourseWithNoInstructor();
   }
 
   getCourseOfferingTime() {
@@ -43,5 +47,22 @@ export class ReportsPageComponent implements OnInit {
       this.reportInstructorTimes = res;
     });
   }
+
+  getCourseInstructorPair() {
+    this.cs.runQuery('SELECT first_name, last_name, instructor_id, course_id, section_num, semester, year FROM Instructor NATURAL JOIN Section NATURAL JOIN Teaches;')
+    .subscribe((res) => {
+      console.log(res);
+      this.reportCourseInstructorPair = res;
+    });
+  }
+
+  getCourseWithNoInstructor() {
+    this.cs.runQuery('select course_id, section_num, semester, year from Section left outer join Teaches using(section_id) where instructor_id is NULL;')
+    .subscribe((res) => {
+      console.log(res);
+      this.reportCourseWithNoInstructor = res;
+    });
+  }
+
 
 }
