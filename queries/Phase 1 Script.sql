@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(2),
 	start_time TIME,
@@ -7,13 +9,38 @@ CREATE TABLE Timeslot (
 INSERT INTO Timeslot (class_mod)
 VALUES
 	('A'),
+	('A3'),
+    ('A4'),
     ('B'),
+    ('B3'),
+    ('B4'),
     ('C'),
+    ('C3'),
+    ('C4'),
     ('D'),
+    ('D3'),
+    ('D4'),
     ('E'),
+    ('E3'),
+    ('E4'),
     ('F'),
+    ('F3'),
+    ('F4'),
     ('G'),
-    ('H');
+    ('G3'),
+    ('G4'),
+    ('H'),
+    ('H3'),
+    ('H4'),
+    ('I'),
+    ('I3'),
+    ('I4'),
+    ('J'),
+    ('J3'),
+    ('J4'),
+    ('AA'),
+    ('BB'),
+    ('WEB');
 	
 CREATE TABLE TEU (
 	num_credits INT(2),
