@@ -1,12 +1,11 @@
-const express = require("express");
-const path = require("path");
 const bodyParser = require("body-parser");
+const cors = require("cors");
+const express = require("express");
 const fs = require("fs");
-
-var cors = require("cors");
-
 const mariadb = require("mariadb");
-const { Console } = require("console");
+const path = require("path");
+const port = 3000;
+
 //Create connection with mariadb
 //Each user will need to enter in their username, database, and password
 //These are left blank
@@ -22,15 +21,10 @@ const pool = mariadb.createPool({
 
 const app = express();
 app.use(cors());
-
-const port = 3000;
-
-//set Static Folder
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
-
-//Allow request from Angular
 app.use((req, res, next) => {
+  //Allow request from Angular
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
   //Request methods u wish to allow
 
@@ -193,6 +187,8 @@ app.get("/api/bronzeAge", async (req, res, next) => {
         var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
 
         script = script.replace(LINE_EXPRESSION, "");
+        script = script.replace("\t", "");
+
         //console.log(script);
 
         const response = await conn.query(script, function (err, results) {
@@ -209,7 +205,7 @@ app.get("/api/bronzeAge", async (req, res, next) => {
     } catch (err) {
       throw err;
     } finally {
-      if (conn) return conn.end();
+      if (conn) conn.end();
     }
   } catch {
     res.send({ response: "Error" });
@@ -230,7 +226,7 @@ app.get("/api/phase1", async (req, res, next) => {
         var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
 
         script = script.replace(LINE_EXPRESSION, "");
-        console.log(script);
+        script = script.replace("\t", "");
 
         const response = await conn.query(script, function (err, results) {
           if (err) {
@@ -246,7 +242,118 @@ app.get("/api/phase1", async (req, res, next) => {
     } catch (err) {
       throw err;
     } finally {
-      if (conn) return conn.end();
+      if (conn) conn.end();
+    }
+  } catch {
+    res.send({ response: "Error" });
+  }
+});
+
+app.get("/api/phase2", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      let script = "";
+      fs.readFile("./queries/Phase 2 Script.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
+
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        script = script.replace("\t", "");
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) conn.end();
+    }
+  } catch {
+    res.send({ response: "Error" });
+  }
+});
+
+app.get("/api/phase3", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      let script = "";
+      fs.readFile("./queries/Phase 3 Script.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
+
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        script = script.replace("\t", "");
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) conn.end();
+    }
+  } catch {
+    res.send({ response: "Error" });
+  }
+});
+
+app.get("/api/stoneAge", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      let script = "";
+      fs.readFile("./queries/Stone Age.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
+
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        script = script.replace("\t", "");
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) conn.end();
     }
   } catch {
     res.send({ response: "Error" });

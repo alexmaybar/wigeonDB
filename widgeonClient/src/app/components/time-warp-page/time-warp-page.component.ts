@@ -12,28 +12,28 @@ export class TimeWarpPageComponent implements OnInit {
 
   runBronzeAge() {
     this.cs.bronzeAge().subscribe((res) => {
-      //console.log(res);
+      console.log(res);
     });
   }
 
   runPhase1() {
     this.cs.phase1().subscribe((res) => {
-      //console.log(res);
+      console.log(res);
     });
   }
   runPhase2() {
     this.cs.phase2().subscribe((res) => {
-      //console.log(res);
+      console.log(res);
     });
   }
   runPhase3() {
     this.cs.phase3().subscribe((res) => {
-      //console.log(res);
+      console.log(res);
     });
   }
   runStoneAge() {
     this.cs.stoneAge().subscribe((res) => {
-      //console.log(res);
+      console.log(res);
     });
   }
 }
