@@ -59,7 +59,9 @@ export class AddPageComponent implements OnInit {
   getNonInstruct() {
     return JSON.stringify(this.nonInstruct);
   }
-  getResponse() {}
+  getResponse() {
+    return this.response;
+  }
 
   add() {
     this.indicator = 'waiting...';
@@ -71,7 +73,16 @@ export class AddPageComponent implements OnInit {
     } else if (this.currentType == 'course') {
       this.cs.addCourse(this.course).subscribe((res) => {
         this.response = res;
-
+        console.log(res);
+      });
+    } else if (this.currentType == 'courseSection') {
+      this.cs.addSection(this.courseSection).subscribe((res) => {
+        this.response = res;
+        console.log(res);
+      });
+    } else if (this.currentType == 'nonInstruct') {
+      this.cs.addNonInstruct(this.nonInstruct).subscribe((res) => {
+        this.response = res;
         console.log(res);
       });
     }

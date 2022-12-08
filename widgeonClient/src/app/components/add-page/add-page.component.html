@@ -27,6 +27,7 @@
       label="Desired Load:"
       [(data)]="instructor.desiredLoad"
     ></app-input-field>
+    <!-- This should just be a number of 7ths that will get translated -->
   </div>
 </div>
 
@@ -105,8 +106,6 @@
 </div>
 
 <input type="button" value="Submit" (click)="add()" />
-<label>{{ indicator }}</label>
-
 <br />
 <label *ngIf="currentType == 'instructor'">
   {{ getInstructor() }}
@@ -121,6 +120,3 @@
   {{ getNonInstruct() }}
 </label>
 <br />
-<label>
-  {{ getResponse() }}
-</label>

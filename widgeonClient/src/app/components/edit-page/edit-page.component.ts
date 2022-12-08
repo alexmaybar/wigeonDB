@@ -10,6 +10,8 @@ export class EditPageComponent implements OnInit {
 
   data: any = null;
 
+  selected: any = null;
+
   ngOnInit(): void {}
 
   getSections() {
@@ -17,5 +19,9 @@ export class EditPageComponent implements OnInit {
       console.log(res);
       this.data = res;
     });
+  }
+
+  select(i: any) {
+    this.selected = this.data[i];
   }
 }

@@ -1,6 +1,7 @@
 const express = require("express");
 const path = require("path");
 const bodyParser = require("body-parser");
+const fs = require("fs");
 
 var cors = require("cors");
 
@@ -16,6 +17,7 @@ const pool = mariadb.createPool({
   database: "wigeon",
   password: "Eagles_02",
   connectionLimit: 5,
+  multipleStatements: true,
 });
 
 const app = express();
@@ -59,8 +61,7 @@ app.get("/api/query", async (req, res, next) => {
       if (conn) return conn.end();
     }
   } catch {
-    res.send("error");      //const rows = await conn.query(req.headers.query);
-
+    res.send("error"); //const rows = await conn.query(req.headers.query);
   }
 });
 
@@ -70,12 +71,15 @@ app.get("/api/addInstructor", async (req, res, next) => {
     try {
       conn = await pool.getConnection();
 
-      const res = await conn.query("INSERT INTO Instructor (email, first_name, last_name, desired_load) VALUES (?,?,?,?)", [
-        req.headers.email,
-        req.headers.first_name,
-        req.headers.last_name,
-        req.headers.desired_load,
-      ]);
+      const res = await conn.query(
+        "INSERT INTO Instructor (email, last_name, first_name, desired_load) VALUES (?,?,?,?)",
+        [
+          req.headers.email,
+          req.headers.last_name,
+          req.headers.first_name,
+          req.headers.desired_load,
+        ]
+      );
       console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
 
       res.send("Done");
@@ -90,30 +94,164 @@ app.get("/api/addInstructor", async (req, res, next) => {
 });
 
 app.get("/api/addCourse", async (req, res, next) => {
+  try {
+    let conn;
     try {
-      let conn;
-      try {
-        conn = await pool.getConnection();
-  
-        const res = await conn.query("INSERT INTO Course (course_id, department, course_title, num_credits) VALUES (?,?,?,?)", [
+      conn = await pool.getConnection();
+
+      const res = await conn.query(
+        "INSERT INTO Course (course_id, department, course_title, num_credits) VALUES (?,?,?,?)",
+        [
           req.headers.course_id,
           req.headers.department,
           req.headers.course_title,
           req.headers.num_credits,
-        ]);
-        console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
-  
-        res.send(res);
-      } catch (err) {
-        throw err;
-      } finally {
-        if (conn) return conn.end();
-      }
-    } catch {
-      res.send("error");
-    }
-  });
+        ]
+      );
+      console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
 
+      res.send({ res: res });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) return conn.end();
+    }
+  } catch {
+    res.send("error");
+  }
+});
+
+app.get("/api/addNonInstruct", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      const res = await conn.query(
+        "INSERT INTO Non_Instruct (instructor_id, task, semester, year, ni_teu) VALUES (?,?,?,?,?)",
+        [
+          req.headers.instructor_id,
+          req.headers.task,
+          req.headers.teu,
+          req.headers.semester,
+          req.headers.year,
+        ]
+      );
+      console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+
+      res.send(res);
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) return conn.end();
+    }
+  } catch {
+    res.send("error");
+  }
+});
+
+app.get("/api/addSection", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      const response = await conn.query(
+        "INSERT INTO Section (semester, section_num, year, course_id, class_mod) VALUES (?,?,?,?,?)",
+        [
+          req.headers.semester,
+          req.headers.section_num,
+          req.headers.year,
+          req.headers.course_id,
+          req.headers.mod,
+        ]
+      );
+      console.log(response); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+
+      res.send(response);
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) return conn.end();
+    }
+  } catch {
+    res.send("error");
+  }
+});
+
+app.get("/api/bronzeAge", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      let script = "";
+      fs.readFile("./queries/Bronze Age.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
+
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        //console.log(script);
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) return conn.end();
+    }
+  } catch {
+    res.send({ response: "Error" });
+  }
+});
+
+app.get("/api/phase1", async (req, res, next) => {
+  try {
+    let conn;
+    try {
+      conn = await pool.getConnection();
+
+      let script = "";
+      fs.readFile("./queries/Phase 1 Script.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
+
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        console.log(script);
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
+    } catch (err) {
+      throw err;
+    } finally {
+      if (conn) return conn.end();
+    }
+  } catch {
+    res.send({ response: "Error" });
+  }
+});
 
 app.listen(port, () => {
   console.log("Server start on port " + port);

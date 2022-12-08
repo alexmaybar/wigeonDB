@@ -14,6 +14,7 @@ import { EditPageComponent } from './components/edit-page/edit-page.component';
 import { DeletePageComponent } from './components/delete-page/delete-page.component';
 import { ReportsPageComponent } from './components/reports-page/reports-page.component';
 import { InputFieldComponent } from './components/input-field/input-field.component';
+import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-page.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { InputFieldComponent } from './components/input-field/input-field.compon
     DeletePageComponent,
     ReportsPageComponent,
     InputFieldComponent,
+    TimeWarpPageComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [ClientService],
