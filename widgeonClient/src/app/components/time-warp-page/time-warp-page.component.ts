@@ -10,30 +10,40 @@ export class TimeWarpPageComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  status = '';
+
   runBronzeAge() {
-    this.cs.bronzeAge().subscribe((res) => {
-      console.log(res);
+    this.status = 'waiting . . .';
+    this.cs.bronzeAge().subscribe((res: any) => {
+      this.status = res.response;
     });
   }
 
   runPhase1() {
-    this.cs.phase1().subscribe((res) => {
-      console.log(res);
+    this.status = 'waiting . . .';
+    this.cs.phase1().subscribe((res: any) => {
+      this.status = res.response;
     });
   }
   runPhase2() {
-    this.cs.phase2().subscribe((res) => {
-      console.log(res);
+    this.status = 'waiting . . .';
+
+    this.cs.phase2().subscribe((res: any) => {
+      this.status = res.response;
     });
   }
   runPhase3() {
-    this.cs.phase3().subscribe((res) => {
-      console.log(res);
+    this.status = 'waiting . . .';
+
+    this.cs.phase3().subscribe((res: any) => {
+      this.status = res.response;
     });
   }
   runStoneAge() {
-    this.cs.stoneAge().subscribe((res) => {
-      console.log(res);
+    this.status = 'waiting . . .';
+
+    this.cs.stoneAge().subscribe((res: any) => {
+      this.status = res.response;
     });
   }
 }
