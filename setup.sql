@@ -6,15 +6,28 @@ CREATE TABLE Instructor (
     desired_load FLOAT(4, 2) not NULL,
     PRIMARY KEY (instructor_id)
   );
-  
+
+CREATE TABLE TEU (
+	num_credits INT(2),
+	teu FLOAT(2, 2) not NULL,
+	PRIMARY KEY (num_credits)
+	);
+
+CREATE TABLE Timeslot (
+	class_mod VARCHAR(2),
+	start_time TIME not NULL,
+	end_time TIME not NULL,
+	PRIMARY KEY (class_mod)
+	);
+
 CREATE TABLE Course (
 	course_id INT(8),
 	department VARCHAR(25) not NULL,
 	course_title VARCHAR(25) not NULL,
 	num_credits INT(2) not NULL,
 	PRIMARY KEY (course_id),
-	FOREIGN KEY (num_credits) REFERENCES TEU (num_credits) ON DELETE NO ACTION ON UPDATE CASCADE
-    CONSTRAINT UC_course UNIQUE (department, course_title, num_credits, teu)
+	FOREIGN KEY (num_credits) REFERENCES TEU (num_credits) ON DELETE NO ACTION ON UPDATE CASCADE,
+	CONSTRAINT UC_course UNIQUE (department, course_title, num_credits)
 	);
 	
 CREATE TABLE Non_Instruct (
@@ -26,7 +39,7 @@ CREATE TABLE Non_Instruct (
     ni_teu FLOAT(4, 2) NOT NULL,
     primary key (non_instruct_id),
 	FOREIGN KEY (instructor_id) REFERENCES Instructor (instructor_id) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT UC_non_inst UNIQUE (instructor_id, task, semester, year, teu)
+    CONSTRAINT UC_non_inst UNIQUE (instructor_id, task, semester, year, ni_teu)
   );
 
 CREATE TABLE Section (
@@ -47,18 +60,5 @@ CREATE TABLE Teaches (
 	instructor_id INT(8) not NULL,
 	PRIMARY KEY (section_id),
 	FOREIGN KEY (instructor_id) REFERENCES Instructor (instructor_id) ON DELETE CASCADE ON UPDATE CASCADE,
-	FOREIGN KEY (section_id) REFERENCES Section (section_id) ON DELETE CASCADE ON UPDATE CASCADE,
-	);
-	
-CREATE TABLE Timeslot (
-	class_mod VARCHAR(2),
-	start_time TIME not NULL,
-	end_time TIME not NULL,
-	PRIMARY KEY (class_mod),
-	);
-	
-CREATE TABLE TEU (
-	num_credits INT(2),
-	teu FLOAT(2, 2) not NULL,
-	PRIMARY KEY (num_credits)
+	FOREIGN KEY (section_id) REFERENCES Section (section_id) ON DELETE CASCADE ON UPDATE CASCADE
 	);

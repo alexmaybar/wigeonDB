@@ -8,14 +8,29 @@ CREATE TABLE Timeslot (
 	);
 INSERT INTO Timeslot (class_mod)
 VALUES
-	('A'),
-    ('B'),
-    ('C'),
-    ('D'),
-    ('E'),
-    ('F'),
-    ('G'),
-    ('H');
+    ('A3'),
+    ('A4'),
+    ('B3'),
+    ('B4'),
+    ('C3'),
+    ('C4'),
+    ('D3'),
+    ('D4'),
+    ('E3'),
+    ('E4'),
+    ('F3'),
+    ('F4'),
+    ('G3'),
+    ('G4'),
+    ('H3'),
+    ('H4'),
+    ('I3'),
+    ('I4'),
+    ('J3'),
+    ('J4'),
+    ('AA'),
+    ('BB'),
+    ('WEB');
 	
 CREATE TABLE TEU (
 	num_credits INT(2),
