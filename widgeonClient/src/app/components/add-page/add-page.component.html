@@ -1,5 +1,5 @@
 <div class="flex-container">
-  <select [(ngModel)]="currentType">
+  <select [(ngModel)]="currentType" (change)="change()">
     <option value="instructor">Add Instructor</option>
     <option value="course">Add Course</option>
     <option value="courseSection">Add Course Section</option>
@@ -7,105 +7,170 @@
   </select>
 </div>
 
-<!-- Add Instructor Form -->
-<div *ngIf="currentType == 'instructor'">
-  <h2>Add Instructor</h2>
+<div class="page-container">
+  <!-- Add Instructor Form -->
+  <div class="vertical-35" *ngIf="currentType == 'instructor'">
+
+    <div class="form-container">
+      <h2>Add Instructor</h2>
+      <app-input-field label="First Name:" [(data)]="instructor.fName"></app-input-field>
+      <app-input-field label="Last Name:" [(data)]="instructor.lName"></app-input-field>
+      <app-input-field label="Email:" [(data)]="instructor.email"></app-input-field>
+      <app-input-field label="Desired Load:" [(data)]="instructor.desiredLoad" type="number"></app-input-field>
+      <!-- This should just be a number of 7ths that will get translated -->
+      <button class="btn" (click)="add()">Submit</button>
+      <div class="message"><label>{{ indicator }}</label></div>
+    </div>
+  </div>
+
+  <!-- Add Course Form -->
+  <div *ngIf="currentType == 'course'">
+    <div class="form-container">
+      <h2>Add Course</h2>
+
+      <app-input-field label="Course Title:" [(data)]="course.title"></app-input-field>
+      <app-input-field label="Course ID:" [(data)]="course.id"></app-input-field>
+      <app-input-field label="Department:" [(data)]="course.department"></app-input-field>
+      <app-input-field label="Number of Credits:" [(data)]="course.numCredits" type="number"></app-input-field>
+      <button class="btn" (click)="add()">Submit</button>
+      <div class="message"><label>{{ indicator }}</label></div>
+    </div>
+  </div>
+
+  <!-- Add Section Form -->
+  <div *ngIf="currentType == 'courseSection'">
+    <div class="form-container">
+      <h2>Add Course Section</h2>
+
+      <app-input-field label="Course ID:" [(data)]="courseSection.id" type="select"
+        [values]="courseIDs"></app-input-field>
+      <app-input-field label="Section Number:" [(data)]="courseSection.sectionNum" type="number"></app-input-field>
+      <app-input-field label="Class Mod:" [(data)]="courseSection.classMod" type="select"
+        [values]="classMods"></app-input-field>
+      <app-input-field label="Semester:" [(data)]="courseSection.semester" type="select"
+        [values]="['Fall','Spring','Interim']"></app-input-field>
+      <app-input-field label="Year:" [(data)]="courseSection.year" type="number" min="2022"></app-input-field>
+      <button class="btn" (click)="add()">Submit</button>
+      <div class="message"><label>{{ indicator }}</label></div>
+    </div>
+  </div>
+
+  <!-- Add Non Instructional Load Form -->
+  <div *ngIf="currentType == 'nonInstruct'">
+    <div class="form-container">
+      <h2>Add Non-Instructional Load</h2>
+      <app-input-field label="Task:" [(data)]="nonInstruct.task"></app-input-field>
+      <app-input-field label="Instructor ID:" [(data)]="nonInstruct.instructorId" type="select" [values]="instructorIDs"
+        [displayValues]="instructorNames"></app-input-field>
+      <app-input-field label="Non-Instructional TEU:" [(data)]="nonInstruct.nonInstructTeu"></app-input-field>
+      <app-input-field label="Semester:" [(data)]="nonInstruct.semester" type="select"
+        [values]="['Fall','Spring','Interim']"></app-input-field>
+      <app-input-field label="Year:" [(data)]="nonInstruct.year"></app-input-field>
+      <button class="btn" (click)="add()">Submit</button>
+      <div class="message"><label>{{ indicator }}</label></div>
+    </div>
+  </div>
+
   <div class="form-container">
-    <app-input-field
-      label="First Name:"
-      [(data)]="instructor.fName"
-    ></app-input-field>
-    <app-input-field
-      label="Last Name:"
-      [(data)]="instructor.lName"
-    ></app-input-field>
-    <app-input-field
-      label="Email:"
-      [(data)]="instructor.email"
-    ></app-input-field>
-    <app-input-field
-      label="Desired Load:"
-      [(data)]="instructor.desiredLoad"
-    ></app-input-field>
+    <div class="results">
+      <div *ngIf="currentType == 'instructor'">
+        <label class="label-m" (click)="sort('first_name')"><strong>First
+            Name:</strong></label>
+        <label class="label-m" (click)="sort('last_name')"><strong>Last
+            Name:</strong></label>
+        <label class="label-s" (click)="sort('instructor_id')"><strong>ID:</strong></label>
+        <label class="label-l" (click)="sort('email')"><strong>Email:</strong></label>
+        <label class="label-s" (click)="sort('desired_load')"><strong>Desired Load:</strong></label>
+      </div>
+      <div *ngIf="currentType == 'course'">
+        <label class="label-s" (click)="sort('course_id')"><strong>Course ID:</strong></label>
+        <label class="label-l" (click)="sort('course_title')"><strong>Course Title:</strong></label>
+        <label class="label-m" (click)="sort('department')"><strong>Department:</strong></label>
+        <label class="label-s" (click)="sort('num_credits')"><strong>Credits:</strong></label>
+      </div>
+      <div *ngIf="currentType == 'courseSection'">
+        <label class="label-s" (click)="sort('course_id')"><strong>Course ID:</strong></label>
+        <label class="label-l" (click)="sort('course_title')"><strong>Course Title:</strong></label>
+        <label class="label-s" (click)="sort('section_num')"><strong>Section Number:</strong></label>
+        <label class="label-s" (click)="sort('semester')"><strong>Semester:</strong></label>
+        <label class="label-s" (click)="sort('year')"><strong>Year:</strong></label>
+        <label class="label-s" (click)="sort('class_mod')"><strong>Class Mod:</strong></label>
+      </div>
+      <div *ngIf="currentType == 'nonInstruct'">
+        <label class="label-s" (click)="sort('task')"><strong>Task:</strong></label>
+        <label class="label-s" (click)="sort('instructor_id')"><strong>Instructor ID:</strong></label>
+        <label class="label-s" (click)="sort('teu')"><strong>TEU:</strong></label>
+        <label class="label-s" (click)="sort('semester')"><strong>Semester:</strong></label>
+        <label class="label-s" (click)="sort('year')"><strong>Year:</strong></label>
+      </div>
+    </div>
+    <div class="results" *ngIf="data != null">
+      <!-- <app-results-panel [resultsObject]="data"></app-results-panel> -->
+      <div *ngIf="currentType=='instructor'" class="form-container">
+        <div *ngFor="let result of data; let i = index" class="item">
+          <label class="label-m">{{ result.first_name }}</label>
+          <label class="label-m">{{ result.last_name }}</label>
+          <label class="label-s">{{ result.instructor_id }}</label>
+          <label class="label-l">{{ result.email }}</label>
+          <label class="label-s">{{ result.desired_load }}</label>
+          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+          </svg>
+
+        </div>
+      </div>
+
+      <div *ngIf="currentType=='course'" class="form-container">
+        <div *ngFor="let result of data; let i = index" class="item">
+          <label class="label-s">{{ result.course_id }}</label>
+          <label class="label-l">{{ result.course_title }}</label>
+          <label class="label-m">{{ result.department }}</label>
+          <label class="label-s">{{ result.num_credits }}</label>
+          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+          </svg>
+        </div>
+      </div>
+
+      <div *ngIf="currentType=='courseSection'" class="form-container">
+        <div *ngFor="let result of data; let i = index" class="item">
+          <label class="label-s">{{ result.course_id }}</label>
+          <label class="label-l">{{ result.course_title}}</label>
+          <label class="label-s">{{ result.section_num }}</label>
+          <label class="label-s">{{ result.semester }}</label>
+          <label class="label-s">{{ result.year }}</label>
+          <label class="label-s">{{ result.class_mod }}</label>
+          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+          </svg>
+        </div>
+      </div>
+
+      <div *ngIf="currentType=='nonInstruct'" class="form-container">
+        <div *ngFor="let result of data; let i = index" class="item">
+          <label class="label-s">{{ result.task }}</label>
+          <label class="label-s">{{ result.instructor_id }}</label>
+          <label class="label-s">{{ result.teu }}</label>
+          <label class="label-s">{{ result.semester }}</label>
+          <label class="label-s">{{ result.year }}</label>
+          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
+          </svg>
+        </div>
+      </div>
+
+    </div>
+    <div *ngIf="data == null">No Data!</div>
   </div>
 </div>
-
-<!-- Add Course Form -->
-<div *ngIf="currentType == 'course'">
-  <h2>Add Course</h2>
-  <div class="form-container">
-    <app-input-field
-      label="Course Title:"
-      [(data)]="course.title"
-    ></app-input-field>
-    <app-input-field label="Course ID:" [(data)]="course.id"></app-input-field>
-    <app-input-field
-      label="Department:"
-      [(data)]="course.department"
-    ></app-input-field>
-    <app-input-field
-      label="Number of Credits:"
-      [(data)]="course.numCredits"
-    ></app-input-field>
-  </div>
-</div>
-
-<!-- Add Section Form -->
-<div *ngIf="currentType == 'courseSection'">
-  <h2>Add Course Section</h2>
-  <div class="form-container">
-    <app-input-field
-      label="Course ID:"
-      [(data)]="courseSection.id"
-    ></app-input-field>
-    <app-input-field
-      label="Section Number:"
-      [(data)]="courseSection.sectionNum"
-    ></app-input-field>
-    <app-input-field
-      label="Class Mod:"
-      [(data)]="courseSection.classMod"
-    ></app-input-field>
-    <app-input-field
-      label="Semester:"
-      [(data)]="courseSection.semester"
-    ></app-input-field>
-    <app-input-field
-      label="Year:"
-      [(data)]="courseSection.year"
-    ></app-input-field>
-  </div>
-</div>
-
-<!-- Add Non Instructional Load Form -->
-<div *ngIf="currentType == 'nonInstruct'">
-  <h2>Add Non-Instructional Load</h2>
-  <div class="form-container">
-    <app-input-field
-      label="Task:"
-      [(data)]="nonInstruct.task"
-    ></app-input-field>
-    <app-input-field
-      label="Instructor ID:"
-      [(data)]="nonInstruct.instructorId"
-    ></app-input-field>
-    <app-input-field
-      label="Non-Instructional TEU:"
-      [(data)]="nonInstruct.nonInstructTeu"
-    ></app-input-field>
-    <app-input-field
-      label="Semester:"
-      [(data)]="nonInstruct.semester"
-    ></app-input-field>
-    <app-input-field
-      label="Year:"
-      [(data)]="nonInstruct.year"
-    ></app-input-field>
-  </div>
-</div>
-
-<input type="button" value="Submit" (click)="add()" />
-<label>{{ indicator }}</label>
 
 <br />
 <label *ngIf="currentType == 'instructor'">
@@ -121,6 +186,3 @@
   {{ getNonInstruct() }}
 </label>
 <br />
-<label>
-  {{ getResponse() }}
-</label>

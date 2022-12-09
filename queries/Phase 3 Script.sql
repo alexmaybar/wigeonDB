@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;
 
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(3),
@@ -8,6 +8,7 @@ CREATE TABLE Timeslot (
 	);
 INSERT INTO Timeslot (class_mod)
 VALUES
+
 	('A3'),
     ('A4'),
     ('B3'),

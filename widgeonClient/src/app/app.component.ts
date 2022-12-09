@@ -31,4 +31,8 @@ export class AppComponent {
     this.router.navigate(['/', 'request']);
     this.current = 'request';
   }
+  goToTimeWarp() {
+    this.router.navigate(['/', 'time-warp']);
+    this.current = 'time-warp';
+  }
 }

@@ -1,14 +1,14 @@
 <div class="flex-container">
-    <input type="button" value="Get Sections" (click)="getSections()">
-
-   
+  <input type="button" value="Get Sections" (click)="getSections()" />
 </div>
 
-<div class="flex-container">
-    <div *ngIf="data!=null">
-        <app-results-panel [resultsObject]="data"></app-results-panel>
-    </div>
-    <div *ngIf="data==null">
-        No Data!
-    </div>
+<div class="flex-container half">
+  <div *ngIf="data != null">
+    <app-results-panel
+      [resultsObject]="data"
+      (selectedEvent)="select($event)"
+    ></app-results-panel>
+  </div>
+  <div *ngIf="data == null">No Data!</div>
 </div>
+<div class="flex-container half"></div>
