@@ -11,7 +11,7 @@ export class ResultsPanelComponent implements OnInit {
 
   @Output() selectedEvent = new EventEmitter<string>();
 
-  isSelected = 0;
+  isSelected = -1;
 
   constructor() {}
 

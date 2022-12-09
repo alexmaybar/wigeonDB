@@ -14,7 +14,19 @@ import {
 })
 export class InputFieldComponent implements OnInit {
   @Input()
+  values: string[] = ['None'];
+
+  @Input()
+  displayValues: any = null;
+
+  @Input()
+  type = 'text';
+
+  @Input()
   label: string = '';
+
+  @Input()
+  min: any = null;
 
   @Input()
   data: any = '';
@@ -25,6 +37,10 @@ export class InputFieldComponent implements OnInit {
   ngOnInit(): void {}
 
   change() {
-    this.dataChange.next(this.data);
+    if (this.type === 'number') {
+      this.dataChange.next(String(this.data));
+    } else {
+      this.dataChange.next(this.data);
+    }
   }
 }

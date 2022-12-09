@@ -1,14 +1,12 @@
 <div>
-    <div class="flex-container">
-        <input [ngModel]="queryStr" (ngModelChange)="queryStr=$event">
-        <button class="retro-btn" (click)="runQuery()">Run Query</button>
+  <div class="flex-container">
+    <input [ngModel]="queryStr" (ngModelChange)="queryStr = $event" />
+    <button class="retro-btn" (click)="runQuery()">Run Query</button>
+  </div>
+  <div class="flex-container">
+    <div *ngIf="data != null">
+      <app-results-panel [resultsObject]="data"></app-results-panel>
     </div>
-    <div class="flex-container">
-        <div *ngIf="data!=null">
-            <app-results-panel [resultsObject]="data"></app-results-panel>
-        </div>
-        <div *ngIf="data==null">
-            No Data!
-        </div>
-    </div>
+    <div *ngIf="data == null">No Data!</div>
+  </div>
 </div>

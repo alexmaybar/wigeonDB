@@ -49,3 +49,52 @@ button:hover:after {
     padding: 13px 50px 13px;
   }
 }
+
+label {
+  font-size: 16px;
+}
+
+input {
+  margin: 0.25em;
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 5px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: #fff;
+}
+
+select {
+  margin: 0.25em;
+  font-size: 16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  padding: 5px;
+  outline: 0;
+  border: 1px solid black;
+  cursor: pointer;
+  position: relative;
+  background-color: rgba(0, 0, 0, 0);
+}
+
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #d6dee1;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #a8bbbf;
+}

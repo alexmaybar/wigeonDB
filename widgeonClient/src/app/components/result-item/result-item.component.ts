@@ -12,6 +12,9 @@ export class ResultItemComponent implements OnInit {
   @Input()
   selected: boolean = false;
 
+  @Input()
+  type: string = '';
+
   constructor() {}
 
   ngOnInit(): void {}

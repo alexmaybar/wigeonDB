@@ -82,8 +82,23 @@ export class ClientService {
     return res;
   }
 
+  phase4() {
+    const res = this.http.get('http://localhost:3000/api/phase4');
+    return res;
+  }
+
   stoneAge() {
     const res = this.http.get('http://localhost:3000/api/stoneAge');
+    return res;
+  }
+
+  deleteRecord(table: any, key: any) {
+    const res = this.http.get('http://localhost:3000/api/deleteRecord', {
+      headers: new HttpHeaders({
+        table: table,
+        key: key,
+      }),
+    });
     return res;
   }
 }

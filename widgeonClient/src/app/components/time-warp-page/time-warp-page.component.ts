@@ -39,6 +39,13 @@ export class TimeWarpPageComponent implements OnInit {
       this.status = res.response;
     });
   }
+  runPhase4() {
+    this.status = 'waiting . . .';
+
+    this.cs.phase4().subscribe((res: any) => {
+      this.status = res.response;
+    });
+  }
   runStoneAge() {
     this.status = 'waiting . . .';
 
