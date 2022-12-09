@@ -1,0 +1,1 @@
+SELECT first_name, last_name, instructor_id, course_id, section_num, semester, year FROM Instructor NATURAL JOIN Section NATURAL JOIN Teaches;
