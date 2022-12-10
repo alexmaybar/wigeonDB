@@ -224,6 +224,14 @@
 </label>
 <br />
 
-<dialog id="dialog">This is the edit popup<br /><br />{{toEdit}}<br />
+<dialog id="dialog">
+  <div *ngIf="currentType =='instructor' && toEdit != null" class="form-container">
+    <h2>Edit Instructor</h2>
+    <app-input-field label="First Name:" [(data)]="toEdit.first_name"></app-input-field>
+    <app-input-field label="Last Name:" [(data)]="toEdit.last_name"></app-input-field>
+    <app-input-field label="Email:" [(data)]="toEdit.email"></app-input-field>
+    <app-input-field label="Desired Load:" [(data)]="toEdit.desired_load" type="number"></app-input-field>
+  </div>
+
   <button (click)="closeDialog()" class="right">Close</button>
 </dialog>

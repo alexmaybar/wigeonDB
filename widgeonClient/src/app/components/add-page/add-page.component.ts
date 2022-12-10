@@ -268,7 +268,7 @@ export class AddPageComponent implements OnInit {
 
   editRecord(index: number) {
     console.log('edit record: ' + index);
-    this.toEdit = JSON.stringify(this.data[index]);
+    this.toEdit = this.data[index];
     this.dialog.showModal();
   }
 
