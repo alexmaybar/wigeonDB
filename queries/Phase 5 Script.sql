@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;
 
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(3),
@@ -151,8 +151,6 @@ VALUES
 
 INSERT IGNORE INTO Section (section_id, semester, section_num, year, course_id, class_mod)
 VALUES
-    --TODO add sections for new classes
-    --TODO add web timeslot for classes
 	(11010122, 'Fall', 1, 2022, 1101, 'A4'),
     (11010222, 'Fall', 2, 2022, 1101, 'B4'),
     (11010322, 'Fall', 3, 2022, 1101, 'C4'),
@@ -229,7 +227,6 @@ VALUES
 
 INSERT IGNORE INTO Teaches (section_id, instructor_id)
 VALUES
-    --TODO add new sections to teaches relation.
 	(21100122, 1),
     (11010122, 1),
     (11010222, 1), 

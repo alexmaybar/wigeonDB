@@ -74,34 +74,52 @@
   <div class="form-container">
     <div class="results">
       <div *ngIf="currentType == 'instructor'">
-        <label class="label-m" (click)="sort('first_name')"><strong>First
+        <label [ngClass]="{'test': curProp == 'first_name'}" class="label-m" (click)="sort('first_name')"><strong>First
             Name:</strong></label>
-        <label class="label-m" (click)="sort('last_name')"><strong>Last
+        <label [ngClass]="{'test': curProp == 'last_name'}" class="label-m" (click)="sort('last_name')"><strong>Last
             Name:</strong></label>
-        <label class="label-s" (click)="sort('instructor_id')"><strong>ID:</strong></label>
-        <label class="label-l" (click)="sort('email')"><strong>Email:</strong></label>
-        <label class="label-s" (click)="sort('desired_load')"><strong>Desired Load:</strong></label>
+        <label [ngClass]="{'test': curProp == 'instructor_id'}" class="label-s"
+          (click)="sort('instructor_id')"><strong>ID:</strong></label>
+        <label [ngClass]="{'test': curProp == 'email'}" class="label-l"
+          (click)="sort('email')"><strong>Email:</strong></label>
+        <label [ngClass]="{'test': curProp == 'desired_load'}" class="label-s"
+          (click)="sort('desired_load')"><strong>Desired Load:</strong></label>
       </div>
       <div *ngIf="currentType == 'course'">
-        <label class="label-s" (click)="sort('course_id')"><strong>Course ID:</strong></label>
-        <label class="label-l" (click)="sort('course_title')"><strong>Course Title:</strong></label>
-        <label class="label-m" (click)="sort('department')"><strong>Department:</strong></label>
-        <label class="label-s" (click)="sort('num_credits')"><strong>Credits:</strong></label>
+        <label [ngClass]="{'test': curProp == 'course_id'}" class="label-s" (click)="sort('course_id')"><strong>Course
+            ID:</strong></label>
+        <label [ngClass]="{'test': curProp == 'course_title'}" class="label-l"
+          (click)="sort('course_title')"><strong>Course Title:</strong></label>
+        <label [ngClass]="{'test': curProp == 'department'}" class="label-m"
+          (click)="sort('department')"><strong>Department:</strong></label>
+        <label [ngClass]="{'test': curProp == 'num_credits'}" class="label-s"
+          (click)="sort('num_credits')"><strong>Credits:</strong></label>
       </div>
       <div *ngIf="currentType == 'courseSection'">
-        <label class="label-s" (click)="sort('course_id')"><strong>Course ID:</strong></label>
-        <label class="label-l" (click)="sort('course_title')"><strong>Course Title:</strong></label>
-        <label class="label-s" (click)="sort('section_num')"><strong>Section Number:</strong></label>
-        <label class="label-s" (click)="sort('semester')"><strong>Semester:</strong></label>
-        <label class="label-s" (click)="sort('year')"><strong>Year:</strong></label>
-        <label class="label-s" (click)="sort('class_mod')"><strong>Class Mod:</strong></label>
+        <label [ngClass]="{'test': curProp == 'course_id'}" class="label-s" (click)="sort('course_id')"><strong>Course
+            ID:</strong></label>
+        <label [ngClass]="{'test': curProp == 'course_title'}" class="label-l"
+          (click)="sort('course_title')"><strong>Course Title:</strong></label>
+        <label [ngClass]="{'test': curProp == 'section_num'}" class="label-s"
+          (click)="sort('section_num')"><strong>Section Number:</strong></label>
+        <label [ngClass]="{'test': curProp == 'semester'}" class="label-s"
+          (click)="sort('semester')"><strong>Semester:</strong></label>
+        <label [ngClass]="{'test': curProp == 'year'}" class="label-s"
+          (click)="sort('year')"><strong>Year:</strong></label>
+        <label [ngClass]="{'test': curProp == 'class_mod'}" class="label-s" (click)="sort('class_mod')"><strong>Class
+            Mod:</strong></label>
       </div>
       <div *ngIf="currentType == 'nonInstruct'">
-        <label class="label-s" (click)="sort('task')"><strong>Task:</strong></label>
-        <label class="label-s" (click)="sort('instructor_id')"><strong>Instructor ID:</strong></label>
-        <label class="label-s" (click)="sort('teu')"><strong>TEU:</strong></label>
-        <label class="label-s" (click)="sort('semester')"><strong>Semester:</strong></label>
-        <label class="label-s" (click)="sort('year')"><strong>Year:</strong></label>
+        <label [ngClass]="{'test': curProp == 'task'}" class="label-s"
+          (click)="sort('task')"><strong>Task:</strong></label>
+        <label [ngClass]="{'test': curProp == 'instructor_id'}" class="label-s"
+          (click)="sort('instructor_id')"><strong>Instructor ID:</strong></label>
+        <label [ngClass]="{'test': curProp == 'ni_teu'}" class="label-s"
+          (click)="sort('ni_teu')"><strong>TEU:</strong></label>
+        <label [ngClass]="{'test': curProp == 'semester'}" class="label-s"
+          (click)="sort('semester')"><strong>Semester:</strong></label>
+        <label [ngClass]="{'test': curProp == 'year'}" class="label-s"
+          (click)="sort('year')"><strong>Year:</strong></label>
       </div>
     </div>
     <div class="results" *ngIf="data != null">
@@ -113,12 +131,16 @@
           <label class="label-s">{{ result.instructor_id }}</label>
           <label class="label-l">{{ result.email }}</label>
           <label class="label-s">{{ result.desired_load }}</label>
+          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
+          </svg>
           <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
             <path
               d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
           </svg>
-
         </div>
       </div>
 
@@ -128,6 +150,11 @@
           <label class="label-l">{{ result.course_title }}</label>
           <label class="label-m">{{ result.department }}</label>
           <label class="label-s">{{ result.num_credits }}</label>
+          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
+          </svg>
           <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
             <path
@@ -144,6 +171,11 @@
           <label class="label-s">{{ result.semester }}</label>
           <label class="label-s">{{ result.year }}</label>
           <label class="label-s">{{ result.class_mod }}</label>
+          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
+          </svg>
           <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
             <path
@@ -156,9 +188,14 @@
         <div *ngFor="let result of data; let i = index" class="item">
           <label class="label-s">{{ result.task }}</label>
           <label class="label-s">{{ result.instructor_id }}</label>
-          <label class="label-s">{{ result.teu }}</label>
+          <label class="label-s">{{ result.ni_teu }}</label>
           <label class="label-s">{{ result.semester }}</label>
           <label class="label-s">{{ result.year }}</label>
+          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
+            <path
+              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
+          </svg>
           <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
             <path
@@ -186,3 +223,7 @@
   {{ getNonInstruct() }}
 </label>
 <br />
+
+<dialog id="dialog">This is the edit popup<br /><br />{{toEdit}}<br />
+  <button (click)="closeDialog()" class="right">Close</button>
+</dialog>

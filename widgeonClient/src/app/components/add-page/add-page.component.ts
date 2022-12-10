@@ -12,11 +12,15 @@ export class AddPageComponent implements OnInit {
   constructor(private router: Router, private cs: ClientService) {}
 
   data: any = null;
+  curProp: any = null;
 
   classMods: any = null;
   courseIDs: any = null;
   instructorIDs: any = null;
   instructorNames: any = null;
+
+  dialog: any = null;
+  toEdit: any = null;
 
   instructor = {
     fName: 'Jon',
@@ -50,6 +54,7 @@ export class AddPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.refreshInstructor();
+    this.dialog = document.getElementById('dialog');
   }
 
   currentType = 'instructor';
@@ -60,12 +65,18 @@ export class AddPageComponent implements OnInit {
   refreshInstructor() {
     this.cs.runQuery('SELECT * FROM Instructor').subscribe((res) => {
       this.data = res;
+      if (this.curProp != null) {
+        this.sort(this.curProp);
+      }
     });
   }
 
   refreshCourse() {
     this.cs.runQuery('SELECT * FROM Course').subscribe((res) => {
       this.data = res;
+      if (this.curProp != null) {
+        this.sort(this.curProp);
+      }
     });
   }
 
@@ -74,6 +85,9 @@ export class AddPageComponent implements OnInit {
       .runQuery('SELECT * FROM Section NATURAL JOIN Course')
       .subscribe((res) => {
         this.data = res;
+        if (this.curProp != null) {
+          this.sort(this.curProp);
+        }
       });
   }
 
@@ -81,6 +95,9 @@ export class AddPageComponent implements OnInit {
     this.cs.runQuery('SELECT * FROM Non_Instruct').subscribe((res) => {
       console.log(res);
       this.data = res;
+      if (this.curProp != null) {
+        this.sort(this.curProp);
+      }
     });
   }
 
@@ -249,7 +266,18 @@ export class AddPageComponent implements OnInit {
     }
   }
 
+  editRecord(index: number) {
+    console.log('edit record: ' + index);
+    this.toEdit = JSON.stringify(this.data[index]);
+    this.dialog.showModal();
+  }
+
+  closeDialog() {
+    this.dialog.close();
+  }
+
   sort(prop: any) {
+    this.curProp = prop;
     this.data.sort((a: any, b: any) => (a[prop] > b[prop] ? 1 : -1));
   }
 }
