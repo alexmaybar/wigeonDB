@@ -4,6 +4,7 @@
 
   delete from Section;
 
+  delete from Teaches;
 
 
 

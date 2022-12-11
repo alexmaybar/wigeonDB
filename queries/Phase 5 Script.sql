@@ -6,31 +6,30 @@ CREATE TABLE Timeslot (
 	end_time TIME,
 	PRIMARY KEY (class_mod)
 	);
-INSERT INTO Timeslot (class_mod)
+INSERT INTO Timeslot (class_mod, start_time, end_time)
 VALUES
-	('A3'),
-    ('A4'),
-    ('B3'),
-    ('B4'),
-    ('C3'),
-    ('C4'),
-    ('D3'),
-    ('D4'),
-    ('E3'),
-    ('E4'),
-    ('F3'),
-    ('F4'),
-    ('G3'),
-    ('G4'),
-    ('H3'),
-    ('H4'),
-    ('I3'),
-    ('I4'),
-    ('J3'),
-    ('J4'),
-    ('AA'),
-    ('BB'),
-    ('WEB');
+    ('A3', '08:00:00', '08:50:00'),
+    ('A4', '07:40:00', '08:50:00'),
+    ('B3', '09:00:00', '09:50:00'),
+    ('B4', '09:00:00', '10:10:00'),
+    ('C3', '11:10:00', '12:00:00'),
+    ('C4', '11:10:00', '12:20:00'),
+    ('D3', '12:30:00', '13:20:00'),
+    ('D4', '12:30:00', '13:40:00'),
+    ('E3', '13:50:00', '14:50:00'),
+    ('F3', '14:50:00', '15:40:00'),
+    ('F4', '14:50:00', '16:00:00'),
+    ('G3', '08:00:00', '09:15:00'),
+    ('H3', '09:25:00', '10:40:00'),
+    ('H4', '09:25:00', '11:05:00'),
+    ('I3', '12:15:00', '13:30:00'),
+    ('I4', '12:15:00', '13:55:00'),
+    ('J3', '14:05:00', '15:20:00'),
+    ('J4', '14:05:00', '15:45:00'),
+    ('AA', '09:00:00', '12:00:00'),
+    ('BB', '11:00:00', '02:00:00'),
+    ('WEB', '00:00:00', '00:00:00');
+
 	
 CREATE TABLE TEU (
 	num_credits INT(2),
@@ -64,7 +63,7 @@ CREATE TABLE Course (
 ALTER TABLE Course ADD CONSTRAINT UC_Course UNIQUE (department, course_title, num_credits);
 	
 CREATE TABLE Non_Instruct (
-    non_instruct_id INT(8),
+    non_instruct_id INT NOT NULL AUTO_INCREMENT,
     instructor_id INT(8) NOT NULL,
     task VARCHAR(75) NOT NULL,
     semester VARCHAR(15) NOT NULL,
@@ -74,6 +73,7 @@ CREATE TABLE Non_Instruct (
 	FOREIGN KEY (instructor_id) REFERENCES Instructor (instructor_id) ON DELETE CASCADE ON UPDATE CASCADE,
     CONSTRAINT UC_non_inst UNIQUE (instructor_id, task, semester, year, ni_teu)
 );
+ALTER TABLE Non_Instruct AUTO_INCREMENT = 1000;
 
 CREATE TABLE Section (
 	section_id INT(8),
@@ -81,7 +81,7 @@ CREATE TABLE Section (
 	section_num INT(2) not NULL,
 	year INT(4) not NULL,
 	course_id INT(8) not NULL,
-	class_mod VARCHAR(3),
+	class_mod VARCHAR(2),
 	PRIMARY KEY (section_id),
 	FOREIGN KEY (course_id) REFERENCES Course (course_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (class_mod) REFERENCES Timeslot (class_mod) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -112,47 +112,54 @@ VALUES
     ('benderson@bethel.edu', 'Anderson', 'Ben', 23.8),
     ('wesmin@bethel.edu', 'Minshull', 'Weston', 23.6);
 
-  INSERT IGNORE INTO Course (course_id, department, course_title, num_credits)
-  VALUES
-      (1101, 'Math', 'Intro to Programming', 4),
-      (2102, 'Math', 'Precalculus', 3),
-      (1104, 'Math', 'Object Oriented Programming', 4),
-      (1212, 'Math', 'Data Structures', 3),
-      (1216, 'Math', 'Algorithms', 4),
-      (1235, 'Math', 'Computer Systems', 3),
-      (1313, 'Math', 'Database Systems', 4),
-      (1351, 'Math', 'High Performance Computing', 4),
-      (1389, 'Math', 'Artificial Intelligence', 3),
-      (2104, 'Math', 'Calculus', 3),
-      (2110, 'Math', 'Calculus 2', 3),
-      (2200, 'Math', 'Multivariable Calculus', 3),
-      (2214, 'Math', 'Discrete Mathematics', 3),
-      (2221, 'Math', 'Linear Algebra', 3),
-      (2310, 'Math', 'Differential Equations', 3),
-      (2311, 'Math', 'Differential Equations and Linear Algebra', 4),
-      (3100, 'Math', 'How Stories Change the World', 3),
-      (3101, 'Math', 'British Literature I', 3),
-      (3110, 'Math', 'Introduction to Creative Writing', 3),
-      (3111, 'Math', 'Introduction to Professional and Technical Writing', 3),
-      (3120, 'Math', 'Reporting I', 3),
-      (3121, 'Math', 'Digital Storytelling', 3),
-      (3203, 'Math', 'World Literature', 3),
-      (5400, 'Math', 'Underwater Basket Weaving', 4),
-      (4200, 'Math', 'American Civilization', 3),
-      (4212, 'Math', 'History of Islam', 3),
-      (4216, 'Math', 'American Constitutional History', 3),
-      (4290, 'Math', 'Introduction to History', 3),
-      (4320, 'Math', 'History and the Human Environment', 3),
-      (4324, 'Math', 'Human Rights in International History', 3),
-      (4333, 'Math', 'History of Crime and Punishment', 3),
-      (4460, 'Math', 'History of Mathematics', 4),
-      (4500, 'Math', 'Methamatics of the 21st Century', 2),
-      (4600, 'Math', 'Discrete Algorithm Structures', 4);
+INSERT IGNORE INTO Non_Instruct (instructor_id, task, semester, year, ni_teu)
+VALUES
+    (1, 'Cleaning the fish tank', 'Fall', 2022, 3.4),
+    (2, 'Underwater basket-weaving TA', 2022, 2),
+    (3, 'Walking Roy', 2022, 3.4);
+
+INSERT IGNORE INTO Course (course_id, department, course_title, num_credits)
+VALUES
+    (1101, 'Math', 'Intro to Programming', 4),
+    (2102, 'Math', 'Precalculus', 3),
+    (1104, 'Math', 'Object Oriented Programming', 4),
+    (1212, 'Math', 'Data Structures', 3),
+    (1216, 'Math', 'Algorithms', 4),
+    (1235, 'Math', 'Computer Systems', 3),
+    (1313, 'Math', 'Database Systems', 4),
+    (1351, 'Math', 'High Performance Computing', 4),
+    (1389, 'Math', 'Artificial Intelligence', 3),
+    (2104, 'Math', 'Calculus', 3),
+    (2110, 'Math', 'Calculus 2', 3),
+    (2200, 'Math', 'Multivariable Calculus', 3),
+    (2214, 'Math', 'Discrete Mathematics', 3),
+    (2221, 'Math', 'Linear Algebra', 3),
+    (2310, 'Math', 'Differential Equations', 3),
+    (2311, 'Math', 'Differential Equations and Linear Algebra', 4),
+    (3100, 'Math', 'How Stories Change the World', 3),
+    (3101, 'Math', 'British Literature I', 3),
+    (3110, 'Math', 'Introduction to Creative Writing', 3),
+    (3111, 'Math', 'Introduction to Professional and Technical Writing', 3),
+    (3120, 'Math', 'Reporting I', 3),
+    (3121, 'Math', 'Digital Storytelling', 3),
+    (3203, 'Math', 'World Literature', 3),
+    (5400, 'Math', 'Underwater Basket Weaving', 4),
+    (4200, 'Math', 'American Civilization', 3),
+    (4212, 'Math', 'History of Islam', 3),
+    (4216, 'Math', 'American Constitutional History', 3),
+    (4290, 'Math', 'Introduction to History', 3),
+    (4320, 'Math', 'History and the Human Environment', 3),
+    (4324, 'Math', 'Human Rights in International History', 3),
+    (4333, 'Math', 'History of Crime and Punishment', 3),
+    (4460, 'Math', 'History of Mathematics', 4),
+    (4500, 'Math', 'Methamatics of the 21st Century', 2),
+    (4600, 'Math', 'Discrete Algorithm Structures', 4);
 
 INSERT IGNORE INTO Section (section_id, semester, section_num, year, course_id, class_mod)
 VALUES
     --TODO add sections for new classes
     --TODO add web timeslot for classes
+    --DONE
 	(11010122, 'Fall', 1, 2022, 1101, 'A4'),
     (11010222, 'Fall', 2, 2022, 1101, 'B4'),
     (11010322, 'Fall', 3, 2022, 1101, 'C4'),
@@ -225,11 +232,13 @@ VALUES
     (22000122, 'Fall', 1, 2022, 2200, 'B3'),
     (21100122, 'Fall', 1, 2022, 2110, 'C3'),
     (54001122, 'Spring', 1, 2023, 5400, NULL),
-    (54001222, 'Spring', 2, 2023, 5400, NULL);
+    (54001222, 'Spring', 2, 2023, 5400, NULL),
+    (44600122, 'Fall', 1, 2023, 4460, 'WEB'),
+    (45001122, 'Spring', 1, 2023, 4500, 'WEB'),
+    (46001122, 'Spring', 1, 2023, 4600, 'WEB');
 
 INSERT IGNORE INTO Teaches (section_id, instructor_id)
 VALUES
-    --TODO add new sections to teaches relation.
 	(21100122, 1),
     (11010122, 1),
     (11010222, 1), 
@@ -300,4 +309,7 @@ VALUES
     (21020322, 10),
     (54000222, 10),
     (42160122, 10),
-    (22000122, 10);
+    (22000122, 10),
+    (44600122 , 1),
+    (45001122 , 2),
+    (46001122 , 3);
