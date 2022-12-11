@@ -13,6 +13,7 @@ import { AddPageComponent } from './components/add-page/add-page.component';
 import { ReportsPageComponent } from './components/reports-page/reports-page.component';
 import { InputFieldComponent } from './components/input-field/input-field.component';
 import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-page.component';
+import { DisplayFieldComponent } from './components/display-field/display-field.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-pag
     ReportsPageComponent,
     InputFieldComponent,
     TimeWarpPageComponent,
+    DisplayFieldComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [ClientService],

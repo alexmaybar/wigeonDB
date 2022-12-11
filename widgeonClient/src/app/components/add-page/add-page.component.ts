@@ -22,6 +22,9 @@ export class AddPageComponent implements OnInit {
   dialog: any = null;
   toEdit: any = null;
 
+  status: any = null;
+  teachesID: any = 1;
+
   instructor = {
     fName: 'Jon',
     lName: 'Doe',
@@ -197,6 +200,7 @@ export class AddPageComponent implements OnInit {
       this.refreshSection();
       this.getClassMods();
       this.getCourseIds();
+      this.getInstructorIds();
     } else if (this.currentType == 'nonInstruct') {
       this.refreshNonInstruct();
       this.getInstructorIds();
@@ -269,8 +273,9 @@ export class AddPageComponent implements OnInit {
   }
 
   editRecord(index: number) {
-    console.log('edit record: ' + index);
+    //console.log('edit record: ' + index);
     this.toEdit = this.data[index];
+    this.status = '';
     this.dialog.showModal();
   }
 
@@ -281,5 +286,15 @@ export class AddPageComponent implements OnInit {
   sort(prop: any) {
     this.curProp = prop;
     this.data.sort((a: any, b: any) => (a[prop] > b[prop] ? 1 : -1));
+  }
+
+  assignInstructor() {
+    let s: string = String(this.toEdit.section_id);
+    let o: string = String(this.toEdit.instructor_id);
+    let n: string = String(this.teachesID);
+    this.cs.addTeaches(s, o, n).subscribe((res: any) => {
+      this.status = res.response;
+      this.refreshSection();
+    });
   }
 }

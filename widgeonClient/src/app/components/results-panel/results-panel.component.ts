@@ -1,4 +1,12 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  Input,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef,
+} from '@angular/core';
 
 @Component({
   selector: 'app-results-panel',
@@ -17,6 +25,9 @@ export class ResultsPanelComponent implements OnInit {
 
   @Input()
   editBtn: any = false;
+
+  @Input()
+  height: any = 'none';
 
   @Output() selectedEvent = new EventEmitter<string>();
   @Output() sortEvent = new EventEmitter<string>();

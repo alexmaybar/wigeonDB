@@ -106,4 +106,15 @@ export class ClientService {
     });
     return res;
   }
+
+  addTeaches(secID: any, oldID: any, newID: any) {
+    const res = this.http.get('http://localhost:3000/api/assignInstructor', {
+      headers: new HttpHeaders({
+        s: secID,
+        o: oldID,
+        n: newID,
+      }),
+    });
+    return res;
+  }
 }

@@ -72,7 +72,7 @@
   </div>
 
   <div class="form-container">
-    <div class="results">
+    <div>
       <app-results-panel *ngIf="currentType == 'instructor'" [resultsObject]="data" [columns]="[
           ['first_name','First Name','m'],
           ['last_name', 'Last Name','m'],
@@ -80,7 +80,7 @@
           ['email', 'Email','l'],
           ['desired_load', 'Desired Load','s']
           ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
-        (editEvent)="editRecord($event)"></app-results-panel>
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
       <app-results-panel *ngIf="currentType == 'course'" [resultsObject]="data" [columns]="[
           ['course_id','ID','s'],
@@ -88,7 +88,7 @@
           ['department', 'Department','m'],
           ['num_credits', 'Credits','s']
           ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
-        (editEvent)="editRecord($event)"></app-results-panel>
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
       <app-results-panel *ngIf="currentType == 'courseSection'" [resultsObject]="data" [columns]="[
         ['course_id','ID','s'],
@@ -99,7 +99,7 @@
         ['class_mod', 'Class Mod','s'],
         ['instructor_id', 'Instructor', 's']
         ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="true"
-        (editEvent)="editRecord($event)"></app-results-panel>
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
       <app-results-panel *ngIf="currentType == 'nonInstruct'" [resultsObject]="data" [columns]="[
         ['task','Task','s'],
@@ -108,7 +108,7 @@
         ['semester', 'Semester','s'],
         ['year', 'Year','s'],
         ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
-        (editEvent)="editRecord($event)"></app-results-panel>
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
     </div>
   </div>
@@ -130,12 +130,28 @@
 <br />
 
 <dialog id="dialog">
-  <div *ngIf="currentType =='instructor' && toEdit != null" class="form-container">
-    <h2>Edit Instructor</h2>
-    <app-input-field label="First Name:" [(data)]="toEdit.first_name"></app-input-field>
-    <app-input-field label="Last Name:" [(data)]="toEdit.last_name"></app-input-field>
-    <app-input-field label="Email:" [(data)]="toEdit.email"></app-input-field>
-    <app-input-field label="Desired Load:" [(data)]="toEdit.desired_load" type="number"></app-input-field>
+  <div *ngIf="currentType =='courseSection' && toEdit != null" class="form-container">
+    <h2>Assign Instructor</h2>
+    <div class="form-container bubble">
+      <label><u><strong>Current Section:</strong></u></label>
+      <app-display-field [value]="toEdit.section_id" label="Section ID"></app-display-field>
+      <app-display-field [value]="toEdit.course_id" label="Course ID"></app-display-field>
+      <app-display-field [value]="toEdit.section_num" label="Section Num"></app-display-field>
+      <app-display-field [value]="toEdit.semester" label="Semester"></app-display-field>
+      <app-display-field [value]="toEdit.year" label="Year"></app-display-field>
+      <app-display-field [value]="toEdit.class_mod" label="class_mod"></app-display-field>
+      <app-display-field [value]="toEdit.instructor_id" label="instructor_id"></app-display-field>
+    </div>
+    <div class="form-container bubble">
+      <div></div>
+      <app-input-field label="New Instructor:" [(data)]="teachesID" type="select" [values]="instructorIDs"
+        [displayValues]="instructorNames"></app-input-field>
+    </div>
+    <button (click)="assignInstructor()">Assign Instructor</button>
+    <div class="status">
+      Status: {{ status }}
+    </div>
+
   </div>
 
   <button (click)="closeDialog()" class="right">Close</button>

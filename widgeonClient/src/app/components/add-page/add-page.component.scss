@@ -2,6 +2,10 @@ app-input-field:nth-child(even) {
   background-color: rgba(128, 128, 128, 0.6);
 }
 
+.bubble {
+  margin: 0.5em;
+}
+
 .item {
   display: flex;
   padding: 0.5em;
@@ -37,4 +41,11 @@ app-input-field:nth-child(even) {
 
 .test::after {
   content: "↓";
+}
+
+.status {
+  margin: 0.75em;
+  padding: 0.25em;
+  border: 1px #000 solid;
+  height: 50px;
 }
