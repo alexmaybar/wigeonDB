@@ -5,7 +5,9 @@
   </div>
   <div class="flex-container">
     <div *ngIf="data != null">
-      <app-results-panel [resultsObject]="data"></app-results-panel>
+      <app-results-panel [resultsObject]="data"
+        [columns]="[['course_id','Course ID','s'],['course_title', 'Course Title','l'],['num_credits', 'Credits','s']]"
+        (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)"></app-results-panel>
     </div>
     <div *ngIf="data == null">No Data!</div>
   </div>

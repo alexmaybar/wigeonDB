@@ -82,7 +82,9 @@ export class AddPageComponent implements OnInit {
 
   refreshSection() {
     this.cs
-      .runQuery('SELECT * FROM Section NATURAL JOIN Course')
+      .runQuery(
+        'SELECT * FROM Section NATURAL JOIN Course NATURAL LEFT OUTER JOIN Teaches'
+      )
       .subscribe((res) => {
         this.data = res;
         if (this.curProp != null) {

@@ -12,9 +12,9 @@ const port = 3000;
 const pool = mariadb.createPool({
   host: "localhost",
   port: 3306,
-  user: "",
-  database: "",
-  password: "",
+  user: "ama84874",
+  database: "wigeon",
+  password: "Eagles_02",
   connectionLimit: 5,
   multipleStatements: true,
 });
