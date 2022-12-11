@@ -27,6 +27,9 @@ export class ReportsPageComponent implements OnInit {
     this.getInstructorCourse();
   }
 
+  //I know these long strings are bad...
+  //I promise that they are identical to the report files
+  //Ben Anderson
   getCourseOfferingTime() {
     this.cs.runQuery('select course_id, section_num, semester, year, start_time, end_time from Section natural join Timeslot ORDER BY course_id;')
     .subscribe((res) => {

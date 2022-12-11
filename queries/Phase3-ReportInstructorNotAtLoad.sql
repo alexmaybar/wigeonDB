@@ -1,3 +1,4 @@
+--Report which instructors are not at target load yet. (withing .3 above or below desired load) 
 with instructorTeaches(instructor_id, first_name, last_name, section_id, desired_load)
 as (select instructor_id, first_name, last_name, section_id, desired_load from Instructor left outer join Teaches using(instructor_id)),
 instructorTEU(instructor_id, first_name, last_name, teu, desired_load)
