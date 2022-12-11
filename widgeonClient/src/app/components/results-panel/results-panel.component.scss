@@ -1,5 +1,25 @@
+:root {
+  --max-height: 400px;
+}
+
 .item {
-  margin: 1em;
+  display: flex;
+  padding: 0.5em;
+  margin: 0.25em;
   border: 1px #000 solid;
-  border-radius: 4px;
+}
+
+.icons {
+  display: flex;
+  justify-content: right;
+  width: 50px;
+}
+
+.sort::after {
+  content: "↓";
+}
+
+.results {
+  margin: 0.5em;
+  overflow-y: scroll;
 }

@@ -98,3 +98,51 @@ select {
 ::-webkit-scrollbar-thumb:hover {
   background-color: #a8bbbf;
 }
+
+.label-s {
+  margin: 0.5em;
+  display: inline-block;
+  width: 100px;
+}
+.label-m {
+  margin: 0.5em;
+  display: inline-block;
+  width: 175px;
+}
+.label-l {
+  margin: 0.5em;
+  display: inline-block;
+  width: 250px;
+}
+
+.trash {
+  margin: 0.1em;
+  margin-top: 0.25em;
+  max-width: 12px;
+  max-height: 12px;
+  opacity: 20%;
+}
+
+.trash:hover {
+  transition-property: all;
+  transition-duration: 0.5s;
+  max-width: 24px;
+  max-height: 24px;
+  opacity: 60%;
+}
+
+.edit {
+  margin: 0.1em;
+  margin-top: 0.25em;
+  max-width: 12px;
+  max-height: 12px;
+  opacity: 20%;
+}
+
+.edit:hover {
+  transition-property: all;
+  transition-duration: 0.5s;
+  max-width: 24px;
+  max-height: 24px;
+  opacity: 60%;
+}

@@ -15,14 +15,6 @@ export class AppComponent {
     this.router.navigate(['/', 'add']);
     this.current = 'add';
   }
-  goToEdit() {
-    this.router.navigate(['/', 'edit']);
-    this.current = 'edit';
-  }
-  goToDelete() {
-    this.router.navigate(['/', 'delete']);
-    this.current = 'delete';
-  }
   goToReports() {
     this.router.navigate(['/', 'reports']);
     this.current = 'reports';

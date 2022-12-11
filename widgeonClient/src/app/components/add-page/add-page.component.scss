@@ -1,21 +1,9 @@
-.label-s {
-  margin: 0.5em;
-  display: inline-block;
-  width: 100px;
-}
-.label-m {
-  margin: 0.5em;
-  display: inline-block;
-  width: 175px;
-}
-.label-l {
-  margin: 0.5em;
-  display: inline-block;
-  width: 250px;
-}
-
 app-input-field:nth-child(even) {
   background-color: rgba(128, 128, 128, 0.6);
+}
+
+.bubble {
+  margin: 0.5em;
 }
 
 .item {
@@ -51,38 +39,13 @@ app-input-field:nth-child(even) {
   overflow-y: scroll;
 }
 
-.trash {
-  margin: 0.1em;
-  margin-top: 0.25em;
-  max-width: 12px;
-  max-height: 12px;
-  opacity: 20%;
-}
-
-.trash:hover {
-  transition-property: all;
-  transition-duration: 0.5s;
-  max-width: 24px;
-  max-height: 24px;
-  opacity: 60%;
-}
-
-.edit {
-  margin: 0.1em;
-  margin-top: 0.25em;
-  max-width: 12px;
-  max-height: 12px;
-  opacity: 20%;
-}
-
-.edit:hover {
-  transition-property: all;
-  transition-duration: 0.5s;
-  max-width: 24px;
-  max-height: 24px;
-  opacity: 60%;
-}
-
 .test::after {
   content: "↓";
+}
+
+.status {
+  margin: 0.75em;
+  padding: 0.25em;
+  border: 1px #000 solid;
+  height: 50px;
 }

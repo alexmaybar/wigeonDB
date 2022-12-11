@@ -10,11 +10,10 @@ import { ResultsPanelComponent } from './components/results-panel/results-panel.
 import { ResultItemComponent } from './components/result-item/result-item.component';
 import { RequestPanelComponent } from './components/request-panel/request-panel.component';
 import { AddPageComponent } from './components/add-page/add-page.component';
-import { EditPageComponent } from './components/edit-page/edit-page.component';
-import { DeletePageComponent } from './components/delete-page/delete-page.component';
 import { ReportsPageComponent } from './components/reports-page/reports-page.component';
 import { InputFieldComponent } from './components/input-field/input-field.component';
 import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-page.component';
+import { DisplayFieldComponent } from './components/display-field/display-field.component';
 
 @NgModule({
   declarations: [
@@ -23,11 +22,10 @@ import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-pag
     ResultItemComponent,
     RequestPanelComponent,
     AddPageComponent,
-    EditPageComponent,
-    DeletePageComponent,
     ReportsPageComponent,
     InputFieldComponent,
     TimeWarpPageComponent,
+    DisplayFieldComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule, FormsModule],
   providers: [ClientService],

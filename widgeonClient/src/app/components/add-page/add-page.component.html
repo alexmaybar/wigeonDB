@@ -65,147 +65,52 @@
       <app-input-field label="Non-Instructional TEU:" [(data)]="nonInstruct.nonInstructTeu"></app-input-field>
       <app-input-field label="Semester:" [(data)]="nonInstruct.semester" type="select"
         [values]="['Fall','Spring','Interim']"></app-input-field>
-      <app-input-field label="Year:" [(data)]="nonInstruct.year"></app-input-field>
+      <app-input-field label="Year:" [(data)]="nonInstruct.year" type="number" min="2022"></app-input-field>
       <button class="btn" (click)="add()">Submit</button>
       <div class="message"><label>{{ indicator }}</label></div>
     </div>
   </div>
 
   <div class="form-container">
-    <div class="results">
-      <div *ngIf="currentType == 'instructor'">
-        <label [ngClass]="{'test': curProp == 'first_name'}" class="label-m" (click)="sort('first_name')"><strong>First
-            Name:</strong></label>
-        <label [ngClass]="{'test': curProp == 'last_name'}" class="label-m" (click)="sort('last_name')"><strong>Last
-            Name:</strong></label>
-        <label [ngClass]="{'test': curProp == 'instructor_id'}" class="label-s"
-          (click)="sort('instructor_id')"><strong>ID:</strong></label>
-        <label [ngClass]="{'test': curProp == 'email'}" class="label-l"
-          (click)="sort('email')"><strong>Email:</strong></label>
-        <label [ngClass]="{'test': curProp == 'desired_load'}" class="label-s"
-          (click)="sort('desired_load')"><strong>Desired Load:</strong></label>
-      </div>
-      <div *ngIf="currentType == 'course'">
-        <label [ngClass]="{'test': curProp == 'course_id'}" class="label-s" (click)="sort('course_id')"><strong>Course
-            ID:</strong></label>
-        <label [ngClass]="{'test': curProp == 'course_title'}" class="label-l"
-          (click)="sort('course_title')"><strong>Course Title:</strong></label>
-        <label [ngClass]="{'test': curProp == 'department'}" class="label-m"
-          (click)="sort('department')"><strong>Department:</strong></label>
-        <label [ngClass]="{'test': curProp == 'num_credits'}" class="label-s"
-          (click)="sort('num_credits')"><strong>Credits:</strong></label>
-      </div>
-      <div *ngIf="currentType == 'courseSection'">
-        <label [ngClass]="{'test': curProp == 'course_id'}" class="label-s" (click)="sort('course_id')"><strong>Course
-            ID:</strong></label>
-        <label [ngClass]="{'test': curProp == 'course_title'}" class="label-l"
-          (click)="sort('course_title')"><strong>Course Title:</strong></label>
-        <label [ngClass]="{'test': curProp == 'section_num'}" class="label-s"
-          (click)="sort('section_num')"><strong>Section Number:</strong></label>
-        <label [ngClass]="{'test': curProp == 'semester'}" class="label-s"
-          (click)="sort('semester')"><strong>Semester:</strong></label>
-        <label [ngClass]="{'test': curProp == 'year'}" class="label-s"
-          (click)="sort('year')"><strong>Year:</strong></label>
-        <label [ngClass]="{'test': curProp == 'class_mod'}" class="label-s" (click)="sort('class_mod')"><strong>Class
-            Mod:</strong></label>
-      </div>
-      <div *ngIf="currentType == 'nonInstruct'">
-        <label [ngClass]="{'test': curProp == 'task'}" class="label-s"
-          (click)="sort('task')"><strong>Task:</strong></label>
-        <label [ngClass]="{'test': curProp == 'instructor_id'}" class="label-s"
-          (click)="sort('instructor_id')"><strong>Instructor ID:</strong></label>
-        <label [ngClass]="{'test': curProp == 'ni_teu'}" class="label-s"
-          (click)="sort('ni_teu')"><strong>TEU:</strong></label>
-        <label [ngClass]="{'test': curProp == 'semester'}" class="label-s"
-          (click)="sort('semester')"><strong>Semester:</strong></label>
-        <label [ngClass]="{'test': curProp == 'year'}" class="label-s"
-          (click)="sort('year')"><strong>Year:</strong></label>
-      </div>
-    </div>
-    <div class="results" *ngIf="data != null">
-      <!-- <app-results-panel [resultsObject]="data"></app-results-panel> -->
-      <div *ngIf="currentType=='instructor'" class="form-container">
-        <div *ngFor="let result of data; let i = index" class="item">
-          <label class="label-m">{{ result.first_name }}</label>
-          <label class="label-m">{{ result.last_name }}</label>
-          <label class="label-s">{{ result.instructor_id }}</label>
-          <label class="label-l">{{ result.email }}</label>
-          <label class="label-s">{{ result.desired_load }}</label>
-          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
-          </svg>
-          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-          </svg>
-        </div>
-      </div>
+    <div>
+      <app-results-panel *ngIf="currentType == 'instructor'" [resultsObject]="data" [columns]="[
+          ['first_name','First Name','m'],
+          ['last_name', 'Last Name','m'],
+          ['instructor_id', 'ID','s'],
+          ['email', 'Email','l'],
+          ['desired_load', 'Desired Load','s']
+          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
-      <div *ngIf="currentType=='course'" class="form-container">
-        <div *ngFor="let result of data; let i = index" class="item">
-          <label class="label-s">{{ result.course_id }}</label>
-          <label class="label-l">{{ result.course_title }}</label>
-          <label class="label-m">{{ result.department }}</label>
-          <label class="label-s">{{ result.num_credits }}</label>
-          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
-          </svg>
-          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-          </svg>
-        </div>
-      </div>
+      <app-results-panel *ngIf="currentType == 'course'" [resultsObject]="data" [columns]="[
+          ['course_id','ID','s'],
+          ['course_title', 'Course Title','l'],
+          ['department', 'Department','m'],
+          ['num_credits', 'Credits','s']
+          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
-      <div *ngIf="currentType=='courseSection'" class="form-container">
-        <div *ngFor="let result of data; let i = index" class="item">
-          <label class="label-s">{{ result.course_id }}</label>
-          <label class="label-l">{{ result.course_title}}</label>
-          <label class="label-s">{{ result.section_num }}</label>
-          <label class="label-s">{{ result.semester }}</label>
-          <label class="label-s">{{ result.year }}</label>
-          <label class="label-s">{{ result.class_mod }}</label>
-          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
-          </svg>
-          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-          </svg>
-        </div>
-      </div>
+      <app-results-panel *ngIf="currentType == 'courseSection'" [resultsObject]="data" [columns]="[
+        ['course_id','ID','s'],
+        ['course_title', 'Course Title','l'],
+        ['section_num', 'Section Number','s'],
+        ['semester', 'Semester','s'],
+        ['year', 'Year','s'],
+        ['class_mod', 'Class Mod','s'],
+        ['instructor_id', 'Instructor', 's']
+        ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="true"
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
-      <div *ngIf="currentType=='nonInstruct'" class="form-container">
-        <div *ngFor="let result of data; let i = index" class="item">
-          <label class="label-s">{{ result.task }}</label>
-          <label class="label-s">{{ result.instructor_id }}</label>
-          <label class="label-s">{{ result.ni_teu }}</label>
-          <label class="label-s">{{ result.semester }}</label>
-          <label class="label-s">{{ result.year }}</label>
-          <svg class="edit" (click)="editRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 512 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M373.1 24.97C401.2-3.147 446.8-3.147 474.9 24.97L487 37.09C515.1 65.21 515.1 110.8 487 138.9L289.8 336.2C281.1 344.8 270.4 351.1 258.6 354.5L158.6 383.1C150.2 385.5 141.2 383.1 135 376.1C128.9 370.8 126.5 361.8 128.9 353.4L157.5 253.4C160.9 241.6 167.2 230.9 175.8 222.2L373.1 24.97zM440.1 58.91C431.6 49.54 416.4 49.54 407 58.91L377.9 88L424 134.1L453.1 104.1C462.5 95.6 462.5 80.4 453.1 71.03L440.1 58.91zM203.7 266.6L186.9 325.1L245.4 308.3C249.4 307.2 252.9 305.1 255.8 302.2L390.1 168L344 121.9L209.8 256.2C206.9 259.1 204.8 262.6 203.7 266.6zM200 64C213.3 64 224 74.75 224 88C224 101.3 213.3 112 200 112H88C65.91 112 48 129.9 48 152V424C48 446.1 65.91 464 88 464H360C382.1 464 400 446.1 400 424V312C400 298.7 410.7 288 424 288C437.3 288 448 298.7 448 312V424C448 472.6 408.6 512 360 512H88C39.4 512 0 472.6 0 424V152C0 103.4 39.4 64 88 64H200z" />
-          </svg>
-          <svg class="trash" (click)="deleteRecord(i)" xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 448 512"><!--! Font Awesome Pro 6.2.1 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. -->
-            <path
-              d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" />
-          </svg>
-        </div>
-      </div>
+      <app-results-panel *ngIf="currentType == 'nonInstruct'" [resultsObject]="data" [columns]="[
+        ['task','Task','s'],
+        ['instructor_id', 'Instructor ID','s'],
+        ['ni_teu', 'TEU','s'],
+        ['semester', 'Semester','s'],
+        ['year', 'Year','s'],
+        ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+        (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
     </div>
-    <div *ngIf="data == null">No Data!</div>
   </div>
 </div>
 
@@ -225,12 +130,28 @@
 <br />
 
 <dialog id="dialog">
-  <div *ngIf="currentType =='instructor' && toEdit != null" class="form-container">
-    <h2>Edit Instructor</h2>
-    <app-input-field label="First Name:" [(data)]="toEdit.first_name"></app-input-field>
-    <app-input-field label="Last Name:" [(data)]="toEdit.last_name"></app-input-field>
-    <app-input-field label="Email:" [(data)]="toEdit.email"></app-input-field>
-    <app-input-field label="Desired Load:" [(data)]="toEdit.desired_load" type="number"></app-input-field>
+  <div *ngIf="currentType =='courseSection' && toEdit != null" class="form-container">
+    <h2>Assign Instructor</h2>
+    <div class="form-container bubble">
+      <label><u><strong>Current Section:</strong></u></label>
+      <app-display-field [value]="toEdit.section_id" label="Section ID"></app-display-field>
+      <app-display-field [value]="toEdit.course_id" label="Course ID"></app-display-field>
+      <app-display-field [value]="toEdit.section_num" label="Section Num"></app-display-field>
+      <app-display-field [value]="toEdit.semester" label="Semester"></app-display-field>
+      <app-display-field [value]="toEdit.year" label="Year"></app-display-field>
+      <app-display-field [value]="toEdit.class_mod" label="class_mod"></app-display-field>
+      <app-display-field [value]="toEdit.instructor_id" label="instructor_id"></app-display-field>
+    </div>
+    <div class="form-container bubble">
+      <div></div>
+      <app-input-field label="New Instructor:" [(data)]="teachesID" type="select" [values]="instructorIDs"
+        [displayValues]="instructorNames"></app-input-field>
+    </div>
+    <button (click)="assignInstructor()">Assign Instructor</button>
+    <div class="status">
+      Status: {{ status }}
+    </div>
+
   </div>
 
   <button (click)="closeDialog()" class="right">Close</button>

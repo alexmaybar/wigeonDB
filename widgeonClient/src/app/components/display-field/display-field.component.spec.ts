@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DeletePageComponent } from './delete-page.component';
+import { DisplayFieldComponent } from './display-field.component';
 
-describe('DeletePageComponent', () => {
-  let component: DeletePageComponent;
-  let fixture: ComponentFixture<DeletePageComponent>;
+describe('DisplayFieldComponent', () => {
+  let component: DisplayFieldComponent;
+  let fixture: ComponentFixture<DisplayFieldComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DeletePageComponent ]
+      declarations: [ DisplayFieldComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DeletePageComponent);
+    fixture = TestBed.createComponent(DisplayFieldComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

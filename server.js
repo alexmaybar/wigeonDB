@@ -445,6 +445,38 @@ app.get("/api/deleteRecord", async (req, res, next) => {
   }
 });
 
+app.get("/api/assignInstructor", async (req, res, next) => {
+  console.log(req.headers.o + " | " + req.headers.n + " | " + req.headers.s);
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let response;
+
+    if (req.headers.o == "null") {
+      response = await conn.query(
+        "INSERT INTO Teaches (section_id, instructor_id) VALUES (?,?)",
+        [req.headers.s, req.headers.n]
+      );
+      res.send({ response: "Assign Instructor Success" });
+      console.log({ response: "Assign Instructor Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    } else if (req.headers.o == req.headers.n) {
+      res.send({ response: "Instructor Already Assigned to Section" });
+    } else {
+      response = await conn.query(
+        "DELETE FROM Teaches WHERE section_id = ? AND instructor_id = ?; INSERT INTO Teaches (section_id, instructor_id) VALUES (?,?);",
+        [req.headers.s, req.headers.o, req.headers.s, req.headers.n]
+      );
+      res.send({ response: "Assign Instructor Success" });
+      console.log({ response: "Assign Instructor Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
 app.listen(port, () => {
   console.log("Server start on port " + port);
 });
