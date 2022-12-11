@@ -52,6 +52,7 @@ app-input-field:nth-child(even) {
 }
 
 .trash {
+  margin: 0.1em;
   margin-top: 0.25em;
   max-width: 12px;
   max-height: 12px;
@@ -64,4 +65,24 @@ app-input-field:nth-child(even) {
   max-width: 24px;
   max-height: 24px;
   opacity: 60%;
+}
+
+.edit {
+  margin: 0.1em;
+  margin-top: 0.25em;
+  max-width: 12px;
+  max-height: 12px;
+  opacity: 20%;
+}
+
+.edit:hover {
+  transition-property: all;
+  transition-duration: 0.5s;
+  max-width: 24px;
+  max-height: 24px;
+  opacity: 60%;
+}
+
+.test::after {
+  content: "↓";
 }

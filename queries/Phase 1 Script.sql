@@ -1,7 +1,7 @@
 DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;
 
 CREATE TABLE Timeslot (
-	class_mod VARCHAR(2),
+	class_mod VARCHAR(3),
 	start_time TIME,
 	end_time TIME,
 	PRIMARY KEY (class_mod)

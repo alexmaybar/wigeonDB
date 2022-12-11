@@ -87,6 +87,11 @@ export class ClientService {
     return res;
   }
 
+  phase5() {
+    const res = this.http.get('http://localhost:3000/api/phase5');
+    return res;
+  }
+
   stoneAge() {
     const res = this.http.get('http://localhost:3000/api/stoneAge');
     return res;
