@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;
 
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(3),
@@ -29,7 +29,6 @@ VALUES
     ('AA', '09:00:00', '12:00:00'),
     ('BB', '11:00:00', '02:00:00'),
     ('WEB', '00:00:00', '00:00:00');
-
 	
 CREATE TABLE TEU (
 	num_credits INT(2),

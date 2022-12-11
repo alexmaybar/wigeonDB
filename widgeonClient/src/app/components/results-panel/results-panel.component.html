@@ -1,1 +1,4 @@
-<app-result-item *ngFor="let result of resultsObject" [resultObject]="result"></app-result-item>
+<div>
+  <app-result-item *ngFor="let result of resultsObject; let i = index" [selected]="isSelected == i"
+    [resultObject]="result" (click)="select(i)"></app-result-item>
+</div>

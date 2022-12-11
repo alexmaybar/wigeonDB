@@ -5,6 +5,7 @@ import { DeletePageComponent } from './components/delete-page/delete-page.compon
 import { EditPageComponent } from './components/edit-page/edit-page.component';
 import { ReportsPageComponent } from './components/reports-page/reports-page.component';
 import { RequestPanelComponent } from './components/request-panel/request-panel.component';
+import { TimeWarpPageComponent } from './components/time-warp-page/time-warp-page.component';
 
 const routes: Routes = [
   { path: 'add', component: AddPageComponent },
@@ -12,6 +13,7 @@ const routes: Routes = [
   { path: 'delete', component: DeletePageComponent },
   { path: 'reports', component: ReportsPageComponent },
   { path: 'request', component: RequestPanelComponent },
+  { path: 'time-warp', component: TimeWarpPageComponent },
 ];
 
 @NgModule({

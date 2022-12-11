@@ -1,11 +1,11 @@
-const express = require("express");
-const path = require("path");
 const bodyParser = require("body-parser");
-
-var cors = require("cors");
-
+const cors = require("cors");
+const express = require("express");
+const fs = require("fs");
 const mariadb = require("mariadb");
-const { Console } = require("console");
+const path = require("path");
+const port = 3000;
+
 //Create connection with mariadb
 //Each user will need to enter in their username, database, and password
 //These are left blank
@@ -16,19 +16,15 @@ const pool = mariadb.createPool({
   database: "",
   password: "",
   connectionLimit: 5,
+  multipleStatements: true,
 });
 
 const app = express();
 app.use(cors());
-
-const port = 3000;
-
-//set Static Folder
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.json());
-
-//Allow request from Angular
 app.use((req, res, next) => {
+  //Allow request from Angular
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
   //Request methods u wish to allow
 
@@ -59,61 +55,395 @@ app.get("/api/query", async (req, res, next) => {
       if (conn) return conn.end();
     }
   } catch {
-    res.send("error");      //const rows = await conn.query(req.headers.query);
-
+    res.send("error"); //const rows = await conn.query(req.headers.query);
   }
 });
 
 app.get("/api/addInstructor", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const response = await conn.query(
+      "INSERT INTO Instructor (email, last_name, first_name, desired_load) VALUES (?,?,?,?)",
+      [
+        req.headers.email,
+        req.headers.last_name,
+        req.headers.first_name,
+        req.headers.desired_load * 3.4,
+      ]
+    );
+    res.send({ response: "Success" });
+    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/addCourse", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const response = await conn.query(
+      "INSERT INTO Course (course_id, department, course_title, num_credits) VALUES (?,?,?,?)",
+      [
+        req.headers.course_id,
+        req.headers.department,
+        req.headers.course_title,
+        req.headers.num_credits,
+      ]
+    );
+    res.send({ response: "Success" });
+    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/addNonInstruct", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    const response = await conn.query(
+      "INSERT INTO Non_Instruct (instructor_id, task, semester, year, ni_teu) VALUES (?,?,?,?,?)",
+      [
+        req.headers.instructor_id,
+        req.headers.task,
+        req.headers.semester,
+        req.headers.year,
+        req.headers.teu,
+      ]
+    );
+    res.send({ response: "Success" });
+    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/addSection", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let section_id =
+      req.headers.course_id +
+      "0" +
+      req.headers.section_num +
+      req.headers.year.charAt(2) +
+      req.headers.year.charAt(3);
+    let response = await conn.query(
+      "INSERT INTO Section (section_id, semester, section_num, year, course_id, class_mod) VALUES (?,?,?,?,?,?)",
+      [
+        section_id,
+        req.headers.semester,
+        req.headers.section_num,
+        req.headers.year,
+        req.headers.course_id,
+        req.headers.mod,
+      ]
+    );
+    res.send({ response: "Success" });
+    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/bronzeAge", async (req, res, next) => {
   try {
     let conn;
     try {
       conn = await pool.getConnection();
 
-      const res = await conn.query("INSERT INTO Instructor (email, first_name, last_name, desired_load) VALUES (?,?,?,?)", [
-        req.headers.email,
-        req.headers.first_name,
-        req.headers.last_name,
-        req.headers.desired_load,
-      ]);
-      console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      let script = "";
+      fs.readFile("./queries/Bronze Age.sql", async (err, inputD) => {
+        if (err) throw err;
+        let script = inputD.toString();
 
-      res.send("Done");
+        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+        script = script.replace(LINE_EXPRESSION, "");
+        script = script.replace("\t", "");
+
+        //console.log(script);
+
+        const response = await conn.query(script, function (err, results) {
+          if (err) {
+            throw err;
+          }
+          for (let i = 0; i < results.length; i++) {
+            console.log(results[i]); // [create1]
+          }
+        });
+
+        res.send({ response: "Success" });
+      });
     } catch (err) {
       throw err;
     } finally {
-      if (conn) return conn.end();
+      if (conn) conn.end();
     }
   } catch {
-    res.send("error");
+    res.send({ response: "Error" });
   }
 });
 
-app.get("/api/addCourse", async (req, res, next) => {
-    try {
-      let conn;
-      try {
-        conn = await pool.getConnection();
-  
-        const res = await conn.query("INSERT INTO Course (course_id, department, course_title, num_credits) VALUES (?,?,?,?)", [
-          req.headers.course_id,
-          req.headers.department,
-          req.headers.course_title,
-          req.headers.num_credits,
-        ]);
-        console.log(res); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
-  
-        res.send(res);
-      } catch (err) {
-        throw err;
-      } finally {
-        if (conn) return conn.end();
-      }
-    } catch {
-      res.send("error");
-    }
-  });
+app.get("/api/phase1", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
 
+    let script = "";
+    fs.readFile("./queries/Phase 1 Script.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/phase2", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let script = "";
+    fs.readFile("./queries/Phase 2 Script.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/phase3", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let script = "";
+    fs.readFile("./queries/Phase 3 Script.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/phase4", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let script = "";
+    fs.readFile("./queries/Phase 4 Script.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/phase5", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let script = "";
+    fs.readFile("./queries/Phase 5 Script.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/stoneAge", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+
+    let script = "";
+    fs.readFile("./queries/Stone Age.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          console.log(results[i]); // [create1]
+        }
+      });
+
+      res.send({ response: "Success" });
+      //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/deleteRecord", async (req, res, next) => {
+  console.log(req.headers.table + " " + req.headers.key);
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    let response;
+
+    if (req.headers.table == "Instructor") {
+      response = await conn.query(
+        "DELETE FROM Instructor WHERE instructor_id = ?",
+        [req.headers.key]
+      );
+    } else if (req.headers.table == "Course") {
+      response = await conn.query("DELETE FROM Course WHERE course_id = ?", [
+        req.headers.key,
+      ]);
+    } else if (req.headers.table == "Section") {
+      response = await conn.query("DELETE FROM Section WHERE section_id = ?", [
+        req.headers.key,
+      ]);
+    }
+
+    res.send({ response: "Delete Success" });
+    console.log({ response: "Delete Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    console.log(err);
+    res.send({ response: err.text });
+    conn.end();
+  }
+});
 
 app.listen(port, () => {
   console.log("Server start on port " + port);

@@ -35,4 +35,75 @@ export class ClientService {
     });
     return res;
   }
+
+  addSection(mySection: any) {
+    const res = this.http.get('http://localhost:3000/api/addSection', {
+      headers: new HttpHeaders({
+        semester: mySection.semester,
+        section_num: mySection.sectionNum,
+        year: mySection.year,
+        course_id: mySection.id,
+        mod: mySection.classMod,
+      }),
+    });
+    return res;
+  }
+
+  addNonInstruct(myNonInstruct: any) {
+    const res = this.http.get('http://localhost:3000/api/addNonInstruct', {
+      headers: new HttpHeaders({
+        instructor_id: myNonInstruct.instructorId,
+        task: myNonInstruct.task,
+        teu: myNonInstruct.nonInstructTeu,
+        semester: myNonInstruct.semester,
+        year: myNonInstruct.year,
+      }),
+    });
+    return res;
+  }
+
+  bronzeAge() {
+    const res = this.http.get('http://localhost:3000/api/bronzeAge');
+    return res;
+  }
+
+  phase1() {
+    const res = this.http.get('http://localhost:3000/api/phase1');
+    return res;
+  }
+
+  phase2() {
+    const res = this.http.get('http://localhost:3000/api/phase2');
+    return res;
+  }
+
+  phase3() {
+    const res = this.http.get('http://localhost:3000/api/phase3');
+    return res;
+  }
+
+  phase4() {
+    const res = this.http.get('http://localhost:3000/api/phase4');
+    return res;
+  }
+
+  phase5() {
+    const res = this.http.get('http://localhost:3000/api/phase5');
+    return res;
+  }
+
+  stoneAge() {
+    const res = this.http.get('http://localhost:3000/api/stoneAge');
+    return res;
+  }
+
+  deleteRecord(table: any, key: any) {
+    const res = this.http.get('http://localhost:3000/api/deleteRecord', {
+      headers: new HttpHeaders({
+        table: table,
+        key: key,
+      }),
+    });
+    return res;
+  }
 }

@@ -1,10 +1,1 @@
-DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor
-
-
-
-
-
-
-
-
-
+DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;

@@ -1,7 +1,6 @@
-<div class="flex-container">
-    <!-- {{resultObject | json}} -->
-    <div class="item" *ngFor="let item of resultObject | keyvalue">
-        <strong>{{item.key}}</strong>:{{item.value}}
-    </div>
+<div class="flex-container" class="item" [ngClass]="{ selected: selected }">
+  <!-- {{resultObject | json}} -->
+  <div *ngFor="let item of resultObject | keyvalue">
+    <label><strong>{{ item.key }}</strong>:{{ item.value }}</label>
+  </div>
 </div>
-<hr>

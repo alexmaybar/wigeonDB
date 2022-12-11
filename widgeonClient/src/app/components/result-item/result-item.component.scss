@@ -1,3 +1,16 @@
+label {
+  margin: 0.5em;
+  display: inline-block;
+  width: 200px;
+}
+
 .item {
+  display: flex;
+  padding: 0.5em;
   margin: 0.25em;
+  border: 1px #000 solid;
+}
+
+.selected {
+  background-color: rgba(51, 51, 51, 0.6);
 }

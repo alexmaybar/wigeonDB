@@ -1,4 +1,25 @@
-<div>
+<div *ngIf="type == 'text'">
   <label>{{ label }}</label>
   <input [(ngModel)]="data" type="text" (keyup)="change()" />
+</div>
+
+<div *ngIf="type == 'select'">
+  <label>{{ label }}</label>
+  <select *ngIf="displayValues == null" [(ngModel)]="data" (change)="change()">
+    <option *ngFor="let val of values" [value]="val">{{val}}</option>
+  </select>
+  <select *ngIf="displayValues != null" [(ngModel)]="data" (change)="change()">
+    <option *ngFor="let val of values; let i = index" [value]="val">
+      {{val}}:{{displayValues[i]}}</option>
+  </select>
+
+</div>
+
+<div *ngIf="type == 'number' && min == null">
+  <label>{{ label }}</label>
+  <input [(ngModel)]="data" type="number" (change)="change()" />
+</div>
+<div *ngIf="type == 'number' && min != null">
+  <label>{{ label }}</label>
+  <input [(ngModel)]="data" type="number" [min]="min" (change)="change()" />
 </div>

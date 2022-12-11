@@ -1,4 +1,4 @@
-DROP TABLE IF EXISTS TEU, Timeslot, Teaches, Non_Instruct, Section, Course, Instructor;
+DROP TABLE IF EXISTS Teaches, Non_Instruct, Section, Course, TEU, Timeslot, Instructor;
 
 CREATE TABLE Timeslot (
 	class_mod VARCHAR(3),
@@ -63,7 +63,7 @@ CREATE TABLE Course (
 ALTER TABLE Course ADD CONSTRAINT UC_Course UNIQUE (department, course_title, num_credits);
 	
 CREATE TABLE Non_Instruct (
-    non_instruct_id INT NOT NULL AUTO_INCREMENT,
+    non_instruct_id INT(8) NOT NULL AUTO_INCREMENT,
     instructor_id INT(8) NOT NULL,
     task VARCHAR(75) NOT NULL,
     semester VARCHAR(15) NOT NULL,
