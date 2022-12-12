@@ -16,10 +16,12 @@
       <app-input-field label="First Name:" [(data)]="instructor.fName"></app-input-field>
       <app-input-field label="Last Name:" [(data)]="instructor.lName"></app-input-field>
       <app-input-field label="Email:" [(data)]="instructor.email"></app-input-field>
-      <app-input-field label="Desired Load:" [(data)]="instructor.desiredLoad" type="number"></app-input-field>
-      <!-- This should just be a number of 7ths that will get translated -->
+      <app-input-field label="Desired Load (7ths):" [(data)]="instructor.desiredLoad" type="number"></app-input-field>
       <button class="btn" (click)="add()">Submit</button>
       <div class="message"><label>{{ indicator }}</label></div>
+      <div class="form-container">
+        <label *ngFor="let err of formatErrors">{{err}}</label>
+      </div>
     </div>
   </div>
 
@@ -79,7 +81,7 @@
           ['instructor_id', 'ID','s'],
           ['email', 'Email','l'],
           ['desired_load', 'Desired Load','s']
-          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="true"
         (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
       <app-results-panel *ngIf="currentType == 'course'" [resultsObject]="data" [columns]="[
@@ -87,7 +89,7 @@
           ['course_title', 'Course Title','l'],
           ['department', 'Department','m'],
           ['num_credits', 'Credits','s']
-          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+          ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="true"
         (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
       <app-results-panel *ngIf="currentType == 'courseSection'" [resultsObject]="data" [columns]="[
@@ -107,36 +109,94 @@
         ['ni_teu', 'TEU','s'],
         ['semester', 'Semester','s'],
         ['year', 'Year','s'],
-        ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="false"
+        ]" (sortEvent)="sort($event)" [deleteBtn]="true" (deleteEvent)="deleteRecord($event)" [editBtn]="true"
         (editEvent)="editRecord($event)" height="400px"></app-results-panel>
 
     </div>
   </div>
 </div>
 
+<!-- UPDATE ROW DIALOG BOXES -->
 <dialog id="dialog">
-  <div *ngIf="currentType =='courseSection' && toEdit != null" class="form-container">
-    <h2>Assign Instructor</h2>
-    <div class="form-container bubble">
-      <label><u><strong>Current Section:</strong></u></label>
-      <app-display-field [value]="toEdit.section_id" label="Section ID"></app-display-field>
-      <app-display-field [value]="toEdit.course_id" label="Course ID"></app-display-field>
-      <app-display-field [value]="toEdit.section_num" label="Section Num"></app-display-field>
-      <app-display-field [value]="toEdit.semester" label="Semester"></app-display-field>
-      <app-display-field [value]="toEdit.year" label="Year"></app-display-field>
-      <app-display-field [value]="toEdit.class_mod" label="class_mod"></app-display-field>
-      <app-display-field [value]="toEdit.instructor_id" label="instructor_id"></app-display-field>
+  <div *ngIf="currentType =='courseSection' && toEdit != null" class="flex-container">
+    <div class="form-container">
+      <h2>Edit Instructor</h2>
+      <app-display-row title="Current Section" [data]="toEdit" [columns]="[
+        ['section_id','Section ID'],
+        ['course_id','Course ID'],
+        ['section_num','Section Num'],
+        ['semester','Semester'],
+        ['year','Year'],
+        ['class_mod','Class Mod'],
+        ['instructor_id','Instructor ID'],
+      ]"></app-display-row>
     </div>
+    <app-edit-row title="New Section Data" [data]="newData" [columns]="[
+      ['section_num','Section Num','number', 1],
+      ['semester','Semester','text'],
+      ['year','Year','number', 2022],
+      ['class_mod','Class Mod','select',classMods],
+    ]" buttonLabel="Update Section" (edit)="update('Section')"></app-edit-row>
     <div class="form-container bubble">
-      <div></div>
-      <app-input-field label="New Instructor:" [(data)]="teachesID" type="select" [values]="instructorIDs"
-        [displayValues]="instructorNames"></app-input-field>
-    </div>
-    <button (click)="assignInstructor()">Assign Instructor</button>
-    <div class="status">
-      Status: {{ status }}
+      <app-edit-row title="Assign Instructor to Section" [data]="newData"
+        [columns]="[['instructor_id','Instructor ID', 'select', instructorIDs, instructorNames]]"
+        buttonLabel="Assign Instructor" (edit)="assignInstructor()"></app-edit-row>
+      <button (click)="unassignInstructor()">Remove Instructor</button>
     </div>
 
+  </div>
+
+  <div *ngIf="currentType == 'instructor' && toEdit != null" class="form-container">
+    <h2>Edit Instructor</h2>
+    <app-display-row title="Current Instructor" [data]="toEdit" [columns]="[
+      ['first_name','First Name'],
+      ['last_name','Last Name'],
+      ['instructor_id','ID'],
+      ['email','Email'],
+      ['desired_load','Desired Load']
+    ]"></app-display-row>
+    <app-edit-row title="New Instructor Data" [data]="newData" [columns]="[
+        ['first_name','First Name','text'],
+        ['last_name','Last Name','text'],
+        ['email','Email','text'],
+        ['desired_load','Desired Load','number', 0],
+      ]" buttonLabel="Update Instructor" (edit)="update('Instructor')"></app-edit-row>
+  </div>
+
+  <div *ngIf="currentType == 'course' && toEdit != null" class="form-container">
+    <h2>Edit Instructor</h2>
+    <app-display-row title="Current Course" [data]="toEdit" [columns]="[
+      ['course_title','Course Title'],
+      ['department','Department'],
+      ['num_credits','Credits'],
+    ]"></app-display-row>
+    <app-edit-row title="New Instructor Data" [data]="newData" [columns]="[
+      ['course_title','Course Title', 'text'],
+      ['department','Department', 'text'],
+      ['num_credits','Credits', 'number', 0],
+    ]" buttonLabel="Update Course" (edit)="update('Course')"></app-edit-row>
+  </div>
+
+
+  <div *ngIf="currentType == 'nonInstruct' && toEdit != null" class="form-container">
+    <h2>Edit Non-Instructional Load</h2>
+    <app-display-row title="Current Non-Instructional Load" [data]="toEdit" [columns]="[
+      ['task','Task'],
+      ['instructor_id','Instructor ID'],
+      ['ni_teu','TEU'],
+      ['semester', 'Semester'],
+      ['year','Year']
+    ]"></app-display-row>
+    <app-edit-row title="New Non-Instructional Load Data" [data]="newData" [columns]="[
+      ['task','Task','text'],
+      ['instructor_id','Instructor ID', 'select', instructorIDs, instructorNames],
+      ['ni_teu','TEU','number', 0],
+      ['semester', 'Semester','text'],
+      ['year','Year','number', 2022]
+    ]" buttonLabel="Update Non-Instructional Load" (edit)="update('Non_Instruct')"></app-edit-row>
+  </div>
+  <div class="status">
+    Status: {{ status }}
   </div>
 
   <button (click)="closeDialog()" class="right">Close</button>

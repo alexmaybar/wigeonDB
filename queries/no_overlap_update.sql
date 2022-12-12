@@ -10,7 +10,7 @@ BEGIN
       AND SUBSTR(Section.class_mod, 1, 1) = (SELECT SUBSTR(class_mod, 1, 1) FROM Section WHERE Section.section_id = NEW.section_id)
       AND Section.class_mod != 'WEB') > 1)
    THEN
-      SIGNAL SQLSTATE 'HY000' SET MYSQL_ERRNO=1627, MESSAGE_TEXT='AA and BB class_mod sections can only be assigned to interim sections';
+      SIGNAL SQLSTATE 'HY000' SET MYSQL_ERRNO=1627, MESSAGE_TEXT='This section could not be assigned because the instructor is already teaching a class during this time';
    END IF;
 
    IF((SELECT semester FROM Section WHERE Section.section_id = NEW.section_id) = 'Interim'
@@ -22,6 +22,6 @@ BEGIN
       AND Section.class_mod = (SELECT class_mod FROM Section WHERE Section.section_id = NEW.section_id)
       AND Section.class_mod != 'WEB') > 1)
    THEN
-      SIGNAL SQLSTATE 'HY000' SET MYSQL_ERRNO=1627, MESSAGE_TEXT='AA and BB class_mod sections can only be assigned to interim sections';
+      SIGNAL SQLSTATE 'HY000' SET MYSQL_ERRNO=1627, MESSAGE_TEXT='This section could not be assigned because the instructor is already teaching a class during this time';
    END IF;
 END

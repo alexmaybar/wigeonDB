@@ -117,4 +117,14 @@ export class ClientService {
     });
     return res;
   }
+
+  updateTable(table: any, object: any) {
+    const res = this.http.get('http://localhost:3000/api/update', {
+      headers: new HttpHeaders({
+        table: table,
+        object: object,
+      }),
+    });
+    return res;
+  }
 }

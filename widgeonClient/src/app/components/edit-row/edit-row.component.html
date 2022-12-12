@@ -1,0 +1,11 @@
+<div class="form-container bubble">
+    <label><u><strong>{{title}}</strong></u></label>
+    <div *ngFor="let col of columns; let i = index" class="form-container">
+        <app-input-field *ngIf="col[2] =='select'" [label]="col[1]" [(data)]="data[col[0]]" type="select"
+            [values]="col[3]" [displayValues]="col[4]"></app-input-field>
+        <app-input-field *ngIf="col[2] == 'text'" [label]="col[1]" [(data)]="data[col[0]]"></app-input-field>
+        <app-input-field *ngIf="col[2] == 'number'" type="number" [label]="col[1]" [(data)]="data[col[0]]"
+            [min]="col[3]"></app-input-field>
+    </div>
+    <button (click)="editEvent()">{{ buttonLabel }}</button>
+</div>

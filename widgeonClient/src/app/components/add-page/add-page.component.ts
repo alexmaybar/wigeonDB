@@ -1,5 +1,3 @@
-import { NgClass } from '@angular/common';
-import { CssSelector } from '@angular/compiler';
 import { Component, OnInit, ɵɵqueryRefresh } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientService } from 'src/app/services/clients.service';
@@ -21,6 +19,7 @@ export class AddPageComponent implements OnInit {
 
   dialog: any = null;
   toEdit: any = null;
+  newData: any = null;
 
   status: any = null;
   teachesID: any = 1;
@@ -62,7 +61,8 @@ export class AddPageComponent implements OnInit {
 
   currentType = 'instructor';
 
-  indicator = '';
+  indicator: string = '';
+  formatErrors: any = [];
   response: any = null;
 
   refreshInstructor() {
@@ -98,7 +98,7 @@ export class AddPageComponent implements OnInit {
 
   refreshNonInstruct() {
     this.cs.runQuery('SELECT * FROM Non_Instruct').subscribe((res) => {
-      console.log(res);
+      //console.log(res);
       this.data = res;
       if (this.curProp != null) {
         this.sort(this.curProp);
@@ -210,13 +210,19 @@ export class AddPageComponent implements OnInit {
   add() {
     this.indicator = 'waiting...';
     if (this.currentType == 'instructor') {
-      this.cs.addInstructor(this.instructor).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetInstructor();
-        }
-        this.refreshInstructor();
-      });
+      let valid = this.validateInstructor(this.instructor);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addInstructor(this.instructor).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetInstructor();
+          }
+          this.refreshInstructor();
+        });
+      }
     } else if (this.currentType == 'course') {
       this.cs.addCourse(this.course).subscribe((res: any) => {
         this.indicator = res.response;
@@ -245,7 +251,7 @@ export class AddPageComponent implements OnInit {
   }
 
   deleteRecord(index: number) {
-    console.log('delete');
+    //console.log('delete');
     this.indicator = 'delete waiting...';
     if (this.currentType == 'instructor') {
       this.cs
@@ -269,12 +275,26 @@ export class AddPageComponent implements OnInit {
           this.refreshSection();
         });
     } else if (this.currentType == 'nonInstruct') {
+      this.cs
+        .deleteRecord(
+          'Non_Instruct',
+          String(this.data[index]['non_instruct_id'])
+        )
+        .subscribe((res: any) => {
+          this.indicator = res.response;
+          this.refreshNonInstruct();
+        });
     }
   }
 
   editRecord(index: number) {
-    //console.log('edit record: ' + index);
     this.toEdit = this.data[index];
+    this.newData = {
+      ...this.toEdit,
+    };
+    if (this.currentType == 'instructor') {
+      this.newData.desired_load = Math.floor(this.newData.desired_load / 3.4);
+    }
     this.status = '';
     this.dialog.showModal();
   }
@@ -288,13 +308,83 @@ export class AddPageComponent implements OnInit {
     this.data.sort((a: any, b: any) => (a[prop] > b[prop] ? 1 : -1));
   }
 
+  unassignInstructor() {
+    let s: string = String(this.toEdit.section_id);
+    let o: string = String(this.toEdit.instructor_id);
+    this.cs.addTeaches(s, o, 'delete').subscribe((res: any) => {
+      this.status = res.response;
+      this.refreshSection();
+      this.newData.instructor_id = '';
+      this.toEdit = {
+        ...this.newData,
+      };
+    });
+  }
+
   assignInstructor() {
     let s: string = String(this.toEdit.section_id);
     let o: string = String(this.toEdit.instructor_id);
-    let n: string = String(this.teachesID);
+    let n: string = String(this.newData.instructor_id);
     this.cs.addTeaches(s, o, n).subscribe((res: any) => {
       this.status = res.response;
       this.refreshSection();
+      this.toEdit = {
+        ...this.newData,
+      };
     });
+  }
+
+  update(table: any) {
+    if (table == 'Instructor') {
+      this.cs
+        .updateTable('Instructor', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshInstructor();
+        });
+    } else if (table == 'Course') {
+      this.cs
+        .updateTable('Course', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshCourse();
+        });
+    } else if (table == 'Section') {
+      this.cs
+        .updateTable('Section', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshSection();
+        });
+    } else if (table == 'Non_Instruct') {
+      this.cs
+        .updateTable('Non_Instruct', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshNonInstruct();
+        });
+    }
+
+    this.toEdit = {
+      ...this.newData,
+    };
+    if (this.currentType == 'instructor') {
+      this.toEdit.desired_load = this.newData.desired_load * 3.4;
+    }
+  }
+
+  validateInstructor(instructor: any) {
+    let res = [];
+    if (!instructor.first_name) {
+      res.push('First Name must not be empty');
+    }
+    if (!instructor.last_name) {
+      res.push('Last Name must not be empty');
+    }
+    return res;
+  }
+
+  isString(val: any): boolean {
+    return typeof val === 'string';
   }
 }

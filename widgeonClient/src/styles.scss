@@ -146,3 +146,12 @@ select {
   max-height: 24px;
   opacity: 60%;
 }
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.bubble {
+  margin: 0.5em;
+}

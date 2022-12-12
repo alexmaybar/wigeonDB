@@ -3,14 +3,11 @@
     <li>
       <img src="https://www.birdorable.com/img/bird/th440/eurasian-wigeon.png" width="50" height="50" />
     </li>
-    <li [ngClass]="{ active: current == 'add' }">
+    <li [ngClass]="{ active: current == 'home' }">
       <a (click)="goToAdd()">Home</a>
     </li>
     <li [ngClass]="{ active: current == 'reports' }">
       <a (click)="goToReports()">Reports</a>
-    </li>
-    <li [ngClass]="{ active: current == 'request' }">
-      <a (click)="goToRequest()">Request</a>
     </li>
     <li [ngClass]="{ active: current == 'time-warp' }">
       <a (click)="goToTimeWarp()">Time Warp!!!</a>
