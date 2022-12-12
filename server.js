@@ -9,12 +9,24 @@ const port = 3000;
 //Create connection with mariadb
 //Each user will need to enter in their username, database, and password
 //These are left blank
+
+//TODO make username and password object
+
+const tPool = mariadb.createPool({
+  host: "localhost",
+  port: 3306,
+  user: "ama84874",
+  database: "wigeon",
+  password: "Eagles_02",
+  connectionLimit: 5,
+});
+
 const pool = mariadb.createPool({
   host: "localhost",
   port: 3306,
-  user: "",
-  database: "",
-  password: "",
+  user: "ama84874",
+  database: "wigeon",
+  password: "Eagles_02",
   connectionLimit: 5,
   multipleStatements: true,
 });
@@ -39,6 +51,42 @@ app.use((req, res, next) => {
 
   next();
 });
+
+async function createTriggerFromFile(fileName) {
+  let conn;
+  try {
+    conn = await tPool.getConnection();
+    fs.readFile("./queries/" + fileName, async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, " ");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        console.log(results);
+      });
+      console.log("Trigger Creation Success");
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    conn.end();
+    throw err;
+  }
+}
+
+async function createTriggers() {
+  await createTriggerFromFile("interim_AA_BB_only_insert.sql");
+  await createTriggerFromFile("interim_AA_BB_only_update.sql");
+  await createTriggerFromFile("no_overlap_insert.sql");
+  await createTriggerFromFile("no_overlap_update.sql");
+}
 
 //Get Clients - GET request
 app.get("/api/query", async (req, res, next) => {
@@ -227,6 +275,8 @@ app.get("/api/phase1", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
@@ -261,8 +311,10 @@ app.get("/api/phase2", async (req, res, next) => {
           console.log(results[i]); // [create1]
         }
       });
+      await createTriggers();
 
       res.send({ response: "Success" });
+
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
@@ -296,6 +348,8 @@ app.get("/api/phase3", async (req, res, next) => {
           console.log(results[i]); // [create1]
         }
       });
+
+      await createTriggers();
 
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
@@ -332,6 +386,8 @@ app.get("/api/phase4", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
@@ -355,7 +411,7 @@ app.get("/api/phase5", async (req, res, next) => {
 
       var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
 
-      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace(LINE_EXPRESSION, " ");
       script = script.replace("\t", "");
 
       const response = await conn.query(script, function (err, results) {
@@ -366,6 +422,8 @@ app.get("/api/phase5", async (req, res, next) => {
           console.log(results[i]); // [create1]
         }
       });
+
+      await createTriggers();
 
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }

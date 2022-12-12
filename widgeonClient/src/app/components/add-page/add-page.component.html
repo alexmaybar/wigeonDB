@@ -114,21 +114,6 @@
   </div>
 </div>
 
-<br />
-<label *ngIf="currentType == 'instructor'">
-  {{ getInstructor() }}
-</label>
-<label *ngIf="currentType == 'course'">
-  {{ getCourse() }}
-</label>
-<label *ngIf="currentType == 'courseSection'">
-  {{ getCourseSection() }}
-</label>
-<label *ngIf="currentType == 'nonInstruct'">
-  {{ getNonInstruct() }}
-</label>
-<br />
-
 <dialog id="dialog">
   <div *ngIf="currentType =='courseSection' && toEdit != null" class="form-container">
     <h2>Assign Instructor</h2>
