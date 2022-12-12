@@ -48,12 +48,12 @@ CREATE TABLE Instructor (
     email VARCHAR(75) not NULL UNIQUE,
     last_name VARCHAR(25) not NULL,
     first_name VARCHAR(25) not NULL,
-    desired_load FLOAT(4, 2) not NULL,
+    desired_load FLOAT(4, 2) DEFAULT 23.5,
     PRIMARY KEY (instructor_id)
 	);
   
 CREATE TABLE Course (
-	course_id INT(4),
+	course_id INT(4) not NULL,
 	department VARCHAR(25) not NULL,
 	course_title VARCHAR(75) not NULL,
 	num_credits INT(2) not NULL,
@@ -89,7 +89,7 @@ CREATE TABLE Section (
 	);
 
 CREATE TABLE Teaches (
-	section_id INT(8),
+	section_id INT(8) not NULL,
 	instructor_id INT(8) not NULL,
 	PRIMARY KEY (section_id),
 	FOREIGN KEY (instructor_id) REFERENCES Instructor (instructor_id) ON DELETE CASCADE ON UPDATE CASCADE,
