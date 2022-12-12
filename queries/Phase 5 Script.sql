@@ -115,8 +115,8 @@ VALUES
 INSERT IGNORE INTO Non_Instruct (instructor_id, task, semester, year, ni_teu)
 VALUES
     (1, 'Cleaning the fish tank', 'Fall', 2022, 3.4),
-    (2, 'Underwater basket-weaving TA', 2022, 2.0),
-    (3, 'Walking Roy', 2022, 3.4);
+    (2, 'Underwater basket-weaving TA', 'Spring', 2022, 2.0),
+    (3, 'Walking Roy', 'Fall', 2022, 3.4);
 
 INSERT IGNORE INTO Course (course_id, department, course_title, num_credits)
 VALUES
