@@ -450,13 +450,9 @@ export class AddPageComponent implements OnInit {
 
   validateNonInstruct(nonInstruct: any) {
     let yearRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
-    let niTeuRegEx = /[0-9]?[0-9]?(\.[0-9][0-9]?)?/;
     let res = [];
     if (!nonInstruct.task) {
       res.push('Task Description Required');
-    }
-    if (niTeuRegEx.test(nonInstruct.nonInstructTeu)) {
-      res.push('Non-Instructional TEU must be a number of the form XX.XX');
     }
     if (!nonInstruct.semester) {
       res.push('Semester Required');
