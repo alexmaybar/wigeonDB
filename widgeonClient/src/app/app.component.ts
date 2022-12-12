@@ -9,19 +9,19 @@ import { Router } from '@angular/router';
 export class AppComponent {
   constructor(private router: Router) {}
 
-  current = '';
+  ngOnInit(): void {
+    this.goToAdd();
+  }
+
+  current = 'home';
 
   goToAdd() {
-    this.router.navigate(['/', 'add']);
-    this.current = 'add';
+    this.router.navigate(['/', 'home']);
+    this.current = 'home';
   }
   goToReports() {
     this.router.navigate(['/', 'reports']);
     this.current = 'reports';
-  }
-  goToRequest() {
-    this.router.navigate(['/', 'request']);
-    this.current = 'request';
   }
   goToTimeWarp() {
     this.router.navigate(['/', 'time-warp']);

@@ -2,20 +2,11 @@ app-input-field:nth-child(even) {
   background-color: rgba(128, 128, 128, 0.6);
 }
 
-.bubble {
-  margin: 0.5em;
-}
-
 .item {
   display: flex;
   padding: 0.5em;
   margin: 0.25em;
   border: 1px #000 solid;
-}
-
-.form-container {
-  display: flex;
-  flex-direction: column;
 }
 
 .message {
@@ -48,4 +39,9 @@ app-input-field:nth-child(even) {
   padding: 0.25em;
   border: 1px #000 solid;
   height: 50px;
+}
+
+.section-dialog {
+  display: flex;
+  justify-content: space-between;
 }

@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RequestPanelComponent } from './request-panel.component';
+import { DisplayRowComponent } from './display-row.component';
 
-describe('RequestPanelComponent', () => {
-  let component: RequestPanelComponent;
-  let fixture: ComponentFixture<RequestPanelComponent>;
+describe('DisplayRowComponent', () => {
+  let component: DisplayRowComponent;
+  let fixture: ComponentFixture<DisplayRowComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RequestPanelComponent ]
+      declarations: [ DisplayRowComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RequestPanelComponent);
+    fixture = TestBed.createComponent(DisplayRowComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

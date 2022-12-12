@@ -1,5 +1,3 @@
-import { NgClass } from '@angular/common';
-import { CssSelector } from '@angular/compiler';
 import { Component, OnInit, ɵɵqueryRefresh } from '@angular/core';
 import { Router } from '@angular/router';
 import { ClientService } from 'src/app/services/clients.service';
@@ -21,6 +19,7 @@ export class AddPageComponent implements OnInit {
 
   dialog: any = null;
   toEdit: any = null;
+  newData: any = null;
 
   status: any = null;
   teachesID: any = 1;
@@ -62,7 +61,8 @@ export class AddPageComponent implements OnInit {
 
   currentType = 'instructor';
 
-  indicator = '';
+  indicator: string = '';
+  formatErrors: any = [];
   response: any = null;
 
   refreshInstructor() {
@@ -98,7 +98,7 @@ export class AddPageComponent implements OnInit {
 
   refreshNonInstruct() {
     this.cs.runQuery('SELECT * FROM Non_Instruct').subscribe((res) => {
-      console.log(res);
+      //console.log(res);
       this.data = res;
       if (this.curProp != null) {
         this.sort(this.curProp);
@@ -210,42 +210,66 @@ export class AddPageComponent implements OnInit {
   add() {
     this.indicator = 'waiting...';
     if (this.currentType == 'instructor') {
-      this.cs.addInstructor(this.instructor).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetInstructor();
-        }
-        this.refreshInstructor();
-      });
+      let valid = this.validateInstructor(this.instructor);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addInstructor(this.instructor).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetInstructor();
+          }
+          this.refreshInstructor();
+        });
+      }
     } else if (this.currentType == 'course') {
-      this.cs.addCourse(this.course).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetCourse();
-        }
-        this.refreshCourse();
-      });
+      let valid = this.validateCourse(this.course);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addCourse(this.course).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetCourse();
+          }
+          this.refreshCourse();
+        });
+      }
     } else if (this.currentType == 'courseSection') {
-      this.cs.addSection(this.courseSection).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetCourseSection();
-        }
-        this.refreshSection();
-      });
+      let valid = this.validateCourseSection(this.courseSection);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addSection(this.courseSection).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetCourseSection();
+          }
+          this.refreshSection();
+        });
+      }
     } else if (this.currentType == 'nonInstruct') {
-      this.cs.addNonInstruct(this.nonInstruct).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetNonInstruct();
-        }
-        this.refreshNonInstruct();
-      });
+      let valid = this.validateNonInstruct(this.nonInstruct);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addNonInstruct(this.nonInstruct).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetNonInstruct();
+          }
+          this.refreshNonInstruct();
+        });
+      }
     }
   }
 
   deleteRecord(index: number) {
-    console.log('delete');
+    //console.log('delete');
     this.indicator = 'delete waiting...';
     if (this.currentType == 'instructor') {
       this.cs
@@ -269,12 +293,26 @@ export class AddPageComponent implements OnInit {
           this.refreshSection();
         });
     } else if (this.currentType == 'nonInstruct') {
+      this.cs
+        .deleteRecord(
+          'Non_Instruct',
+          String(this.data[index]['non_instruct_id'])
+        )
+        .subscribe((res: any) => {
+          this.indicator = res.response;
+          this.refreshNonInstruct();
+        });
     }
   }
 
   editRecord(index: number) {
-    //console.log('edit record: ' + index);
     this.toEdit = this.data[index];
+    this.newData = {
+      ...this.toEdit,
+    };
+    if (this.currentType == 'instructor') {
+      this.newData.desired_load = Math.floor(this.newData.desired_load / 3.4);
+    }
     this.status = '';
     this.dialog.showModal();
   }
@@ -288,13 +326,151 @@ export class AddPageComponent implements OnInit {
     this.data.sort((a: any, b: any) => (a[prop] > b[prop] ? 1 : -1));
   }
 
+  unassignInstructor() {
+    let s: string = String(this.toEdit.section_id);
+    let o: string = String(this.toEdit.instructor_id);
+    this.cs.addTeaches(s, o, 'delete').subscribe((res: any) => {
+      this.status = res.response;
+      this.refreshSection();
+      this.newData.instructor_id = '';
+      this.toEdit = {
+        ...this.newData,
+      };
+    });
+  }
+
   assignInstructor() {
     let s: string = String(this.toEdit.section_id);
     let o: string = String(this.toEdit.instructor_id);
-    let n: string = String(this.teachesID);
+    let n: string = String(this.newData.instructor_id);
     this.cs.addTeaches(s, o, n).subscribe((res: any) => {
       this.status = res.response;
       this.refreshSection();
+      this.toEdit = {
+        ...this.newData,
+      };
     });
+  }
+
+  update(table: any) {
+    if (table == 'Instructor') {
+      this.cs
+        .updateTable('Instructor', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshInstructor();
+        });
+    } else if (table == 'Course') {
+      this.cs
+        .updateTable('Course', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshCourse();
+        });
+    } else if (table == 'Section') {
+      this.cs
+        .updateTable('Section', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshSection();
+        });
+    } else if (table == 'Non_Instruct') {
+      this.cs
+        .updateTable('Non_Instruct', JSON.stringify(this.newData))
+        .subscribe((res: any) => {
+          this.status = res.response;
+          this.refreshNonInstruct();
+        });
+    }
+
+    this.toEdit = {
+      ...this.newData,
+    };
+    if (this.currentType == 'instructor') {
+      this.toEdit.desired_load = this.newData.desired_load * 3.4;
+    }
+  }
+
+  validateInstructor(instructor: any) {
+    let emailRegEx: RegExp = /^[A-Za-z0-9+_.-]+@(.+)$/;
+    let res = [];
+    if (!instructor.fName) {
+      res.push('First Name must not be empty');
+    }
+    if (!instructor.lName) {
+      res.push('Last Name must not be empty');
+    }
+    if (!emailRegEx.test(instructor.email)) {
+      res.push('Invalid Email');
+    }
+    if (instructor.desiredLoad < 1 || instructor.desiredLoad > 10) {
+      res.push('Desired Load out of bounds (1-10)');
+    }
+    return res;
+  }
+
+  validateCourse(course: any) {
+    let courseIdRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let res = [];
+    if (!course.title) {
+      res.push('Course title must not be empty');
+    }
+    if (!course.department) {
+      res.push('Department must not be empty');
+    }
+    if (!courseIdRegEx.test(course.id)) {
+      res.push('Course ID must be a 4 digit code');
+    }
+    if (course.numCredits < 1 || course.numCredits > 4) {
+      res.push('Credit Number out of bounds (1-4)');
+    }
+    return res;
+  }
+
+  validateCourseSection(section: any) {
+    let yearRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let res = [];
+    if (section.sectionNum < 1) {
+      res.push('Section Number must be greater than 0');
+    }
+    if (!section.id) {
+      res.push('Course ID Required');
+    }
+    if (!section.semester) {
+      res.push('Semester Required');
+    }
+    if (!section.year) {
+      res.push('Year Required');
+    }
+    if (!yearRegEx.test(section.year)) {
+      res.push('Year must be a 4 digit number');
+    }
+    return res;
+  }
+
+  validateNonInstruct(nonInstruct: any) {
+    let yearRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let niTeuRegEx = /[0-9]?[0-9]?(\.[0-9][0-9]?)?/;
+    let res = [];
+    if (!nonInstruct.task) {
+      res.push('Task Description Required');
+    }
+    if (niTeuRegEx.test(nonInstruct.nonInstructTeu)) {
+      res.push('Non-Instructional TEU must be a number of the form XX.XX');
+    }
+    if (!nonInstruct.semester) {
+      res.push('Semester Required');
+    }
+    if (!nonInstruct.year) {
+      res.push('Year Required');
+    }
+    if (!yearRegEx.test(nonInstruct.year)) {
+      res.push('Year must be a 4 digit number');
+    }
+    return res;
+  }
+
+  isString(val: any): boolean {
+    return typeof val === 'string';
   }
 }

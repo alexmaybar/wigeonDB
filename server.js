@@ -9,12 +9,27 @@ const port = 3000;
 //Create connection with mariadb
 //Each user will need to enter in their username, database, and password
 //These are left blank
+const credentials = {
+  user: "ama84874",
+  database: "wigeon",
+  password: "Eagles_02",
+};
+
+const tPool = mariadb.createPool({
+  host: "localhost",
+  port: 3306,
+  user: credentials.user,
+  database: credentials.database,
+  password: credentials.password,
+  connectionLimit: 5,
+});
+
 const pool = mariadb.createPool({
   host: "localhost",
   port: 3306,
-  user: "",
-  database: "",
-  password: "",
+  user: credentials.user,
+  database: credentials.database,
+  password: credentials.password,
   connectionLimit: 5,
   multipleStatements: true,
 });
@@ -40,7 +55,41 @@ app.use((req, res, next) => {
   next();
 });
 
-//Get Clients - GET request
+async function createTriggerFromFile(fileName) {
+  let conn;
+  try {
+    conn = await tPool.getConnection();
+    fs.readFile("./queries/" + fileName, async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
+
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+
+      script = script.replace(LINE_EXPRESSION, " ");
+      script = script.replace("\t", "");
+
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        console.log(results);
+      });
+      conn.end();
+    });
+  } catch (err) {
+    console.log(err);
+    conn.end();
+    throw err;
+  }
+}
+
+async function createTriggers() {
+  await createTriggerFromFile("interim_AA_BB_only_insert.sql");
+  await createTriggerFromFile("interim_AA_BB_only_update.sql");
+  await createTriggerFromFile("no_overlap_insert.sql");
+  await createTriggerFromFile("no_overlap_update.sql");
+}
+
 app.get("/api/query", async (req, res, next) => {
   try {
     let conn;
@@ -74,10 +123,10 @@ app.get("/api/addInstructor", async (req, res, next) => {
       ]
     );
     res.send({ response: "Success" });
-    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     conn.end();
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -98,10 +147,10 @@ app.get("/api/addCourse", async (req, res, next) => {
       ]
     );
     res.send({ response: "Success" });
-    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     conn.end();
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -123,10 +172,10 @@ app.get("/api/addNonInstruct", async (req, res, next) => {
       ]
     );
     res.send({ response: "Success" });
-    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     conn.end();
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -155,51 +204,48 @@ app.get("/api/addSection", async (req, res, next) => {
       ]
     );
     res.send({ response: "Success" });
-    console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     conn.end();
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
 });
 
 app.get("/api/bronzeAge", async (req, res, next) => {
+  let conn;
   try {
-    let conn;
-    try {
-      conn = await pool.getConnection();
+    conn = await pool.getConnection();
 
-      let script = "";
-      fs.readFile("./queries/Bronze Age.sql", async (err, inputD) => {
-        if (err) throw err;
-        let script = inputD.toString();
+    let script = "";
+    fs.readFile("./queries/Bronze Age.sql", async (err, inputD) => {
+      if (err) throw err;
+      let script = inputD.toString();
 
-        var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
+      var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
 
-        script = script.replace(LINE_EXPRESSION, "");
-        script = script.replace("\t", "");
+      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace("\t", "");
 
-        //console.log(script);
+      //console.log(script);
 
-        const response = await conn.query(script, function (err, results) {
-          if (err) {
-            throw err;
-          }
-          for (let i = 0; i < results.length; i++) {
-            console.log(results[i]); // [create1]
-          }
-        });
-
-        res.send({ response: "Success" });
+      const response = await conn.query(script, function (err, results) {
+        if (err) {
+          throw err;
+        }
+        for (let i = 0; i < results.length; i++) {
+          //console.log(results[i]); // [create1]
+        }
       });
-    } catch (err) {
-      throw err;
-    } finally {
-      if (conn) conn.end();
-    }
-  } catch {
-    res.send({ response: "Error" });
+    });
+    res.send({ response: "Success" });
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.end();
+  } catch (err) {
+    //console.log(err);
+    res.send({ response: err.text });
+    conn.end();
   }
 });
 
@@ -227,12 +273,14 @@ app.get("/api/phase1", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -261,13 +309,15 @@ app.get("/api/phase2", async (req, res, next) => {
           console.log(results[i]); // [create1]
         }
       });
+      await createTriggers();
 
       res.send({ response: "Success" });
+
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -297,12 +347,14 @@ app.get("/api/phase3", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -332,12 +384,14 @@ app.get("/api/phase4", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -355,7 +409,7 @@ app.get("/api/phase5", async (req, res, next) => {
 
       var LINE_EXPRESSION = /\r\n|\n\r|\n|\r/g; // expression symbols order is very important
 
-      script = script.replace(LINE_EXPRESSION, "");
+      script = script.replace(LINE_EXPRESSION, " ");
       script = script.replace("\t", "");
 
       const response = await conn.query(script, function (err, results) {
@@ -367,12 +421,14 @@ app.get("/api/phase5", async (req, res, next) => {
         }
       });
 
+      await createTriggers();
+
       res.send({ response: "Success" });
       //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
@@ -407,14 +463,13 @@ app.get("/api/stoneAge", async (req, res, next) => {
       conn.end();
     });
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
 });
 
 app.get("/api/deleteRecord", async (req, res, next) => {
-  console.log(req.headers.table + " " + req.headers.key);
   let conn;
   try {
     conn = await pool.getConnection();
@@ -433,32 +488,33 @@ app.get("/api/deleteRecord", async (req, res, next) => {
       response = await conn.query("DELETE FROM Section WHERE section_id = ?", [
         req.headers.key,
       ]);
+    } else if (req.headers.table == "Non_Instruct") {
+      response = await conn.query(
+        "DELETE FROM Non_Instruct WHERE non_instruct_id = ?",
+        [req.headers.key]
+      );
     }
 
     res.send({ response: "Delete Success" });
-    console.log({ response: "Delete Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     conn.end();
   } catch (err) {
-    console.log(err);
+    //console.log(err);
     res.send({ response: err.text });
     conn.end();
   }
 });
 
 app.get("/api/assignInstructor", async (req, res, next) => {
-  console.log(req.headers.o + " | " + req.headers.n + " | " + req.headers.s);
   let conn;
   try {
     conn = await pool.getConnection();
+    conn.beginTransaction();
     let response;
-
-    if (req.headers.o == "null") {
+    if (req.headers.n == "delete") {
       response = await conn.query(
-        "INSERT INTO Teaches (section_id, instructor_id) VALUES (?,?)",
-        [req.headers.s, req.headers.n]
+        "DELETE FROM Teaches WHERE section_id = ? AND instructor_id = ?",
+        [req.headers.s, req.headers.o]
       );
-      res.send({ response: "Assign Instructor Success" });
-      console.log({ response: "Assign Instructor Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     } else if (req.headers.o == req.headers.n) {
       res.send({ response: "Instructor Already Assigned to Section" });
     } else {
@@ -466,13 +522,78 @@ app.get("/api/assignInstructor", async (req, res, next) => {
         "DELETE FROM Teaches WHERE section_id = ? AND instructor_id = ?; INSERT INTO Teaches (section_id, instructor_id) VALUES (?,?);",
         [req.headers.s, req.headers.o, req.headers.s, req.headers.n]
       );
-      res.send({ response: "Assign Instructor Success" });
-      console.log({ response: "Assign Instructor Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
     }
+    res.send({ response: "Assign Instructor Success" });
+    conn.commit();
     conn.end();
   } catch (err) {
-    console.log(err);
+    conn.rollback();
     res.send({ response: err.text });
+    conn.end();
+  }
+});
+
+app.get("/api/update", async (req, res, next) => {
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    conn.beginTransaction();
+    let response;
+    let object = JSON.parse(req.headers.object);
+    if (req.headers.table == "Instructor") {
+      response = await conn.query(
+        "UPDATE Instructor SET first_name = ?, last_name = ?, email = ?, desired_load = ? WHERE instructor_id = ?",
+        [
+          object.first_name,
+          object.last_name,
+          object.email,
+          object.desired_load * 3.4,
+          object.instructor_id,
+        ]
+      );
+    } else if (req.headers.table == "Course") {
+      response = await conn.query(
+        "UPDATE Course SET course_title = ?, department = ?, num_credits = ? WHERE course_id = ?",
+        [
+          object.course_title,
+          object.department,
+          object.num_credits,
+          object.course_id,
+        ]
+      );
+    } else if (req.headers.table == "Section") {
+      response = await conn.query(
+        "UPDATE Section SET section_num = ?, semester = ?, year = ?, class_mod = ? WHERE section_id = ?",
+        [
+          object.section_num,
+          object.semester,
+          object.year,
+          object.class_mod,
+          object.section_id,
+        ]
+      );
+    } else if (req.headers.table == "Non_Instruct") {
+      response = await conn.query(
+        "UPDATE Non_Instruct SET task = ?, instructor_id = ?, ni_teu = ?, semester = ?, year = ? WHERE non_instruct_id = ?",
+        [
+          object.task,
+          object.instructor_id,
+          object.ni_teu,
+          object.semester,
+          object.year,
+          object.non_instruct_id,
+        ]
+      );
+    }
+
+    res.send({ response: "Success" });
+    //console.log({ response: "Success", output: response }); // { affectedRows: 1, insertId: 1, warningStatus: 0 }
+    conn.commit();
+    conn.end();
+  } catch (err) {
+    //console.log(err);
+    res.send({ response: err.text });
+    conn.rollback();
     conn.end();
   }
 });

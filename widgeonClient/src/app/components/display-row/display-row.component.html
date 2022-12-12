@@ -1,0 +1,5 @@
+<div class="form-container bubble">
+    <label><u><strong>{{title}}:</strong></u></label>
+    <app-display-field *ngFor="let col of columns; let i = index" [value]="data[col[0]]"
+        [label]="col[1]"></app-display-field>
+</div>
