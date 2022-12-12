@@ -1,46 +1,48 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <title>Reports Page</title> 
+    <title>Reports Page</title>
 </head>
 
 <body>
 
-<h1>Reports</h1>
-<div>
-    <h3>Course Offerings and their assigned Instructor</h3>
-    <app-results-panel [resultsObject]="reportCourseInstructorPair"></app-results-panel>
-</div>
+    <h1>Reports</h1>
+    <div>
+        <h3>Course Offerings and their assigned Instructor</h3>
+        <app-results-panel [resultsObject]="reportCourseInstructorPair"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Instructors and their assigned Course Offering</h3>
-    <app-results-panel [resultsObject]="reportInstructorCourse"></app-results-panel>
-</div>
+    <div>
+        <h3>Instructors and their assigned Course Offering</h3>
+        <app-results-panel [resultsObject]="reportInstructorCourse"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Courses that have not been assigned an Instructor</h3>
-    <app-results-panel [resultsObject]="reportCourseWithNoInstructor"></app-results-panel>
-</div>
+    <div>
+        <h3>Courses that have not been assigned an Instructor</h3>
+        <app-results-panel [resultsObject]="reportCourseWithNoInstructor"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Instructors not at their Target Load</h3>
-    <app-results-panel [resultsObject]="reportInstructorsNotAtTarget"></app-results-panel>
-</div>
+    <div>
+        <h3>Instructors not at their Target Load</h3>
+        <app-results-panel [resultsObject]="reportInstructorsNotAtTarget"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Course offerings without an assigned time</h3>
-    <app-results-panel [resultsObject]="reportCourseWithNoTime"></app-results-panel>
-</div>
+    <div>
+        <h3>Course offerings without an assigned time</h3>
+        <app-results-panel [resultsObject]="reportCourseWithNoTime"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Time of each course offering</h3>
-    <app-results-panel [resultsObject]="reportCourseOfferingTime"></app-results-panel>
-</div>
+    <div>
+        <h3>Time of each course offering</h3>
+        <app-results-panel [resultsObject]="reportCourseOfferingTime"></app-results-panel>
+    </div>
 
-<div>
-    <h3>Times Instructors teach</h3>
-    <app-results-panel [resultsObject]="reportInstructorTimes"></app-results-panel>
-</div>
+    <div>
+        <h3>Times Instructors teach</h3>
+        <app-results-panel [resultsObject]="reportInstructorTimes"></app-results-panel>
+    </div>
 
 </body>
+
 </html>
