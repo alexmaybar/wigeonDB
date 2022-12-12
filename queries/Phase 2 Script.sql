@@ -81,7 +81,7 @@ CREATE TABLE Section (
 	section_num INT(2) not NULL,
 	year INT(4) not NULL,
 	course_id INT(8) not NULL,
-	class_mod VARCHAR(2),
+	class_mod VARCHAR(3),
 	PRIMARY KEY (section_id),
 	FOREIGN KEY (course_id) REFERENCES Course (course_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (class_mod) REFERENCES Timeslot (class_mod) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -103,11 +103,11 @@ VALUES
     ('j-yang@bethel.edu', 'Yang', 'Jed', 23.5),
     ('t-auch@bethel.edu', 'Auch', 'Tanner', 23.5),
     ('d-thomas@bethel.edu', 'Thomas', 'Deborah', 23.5),
-    ('yacste@bethel.edu', 'Yackel', 'Steven', 16.7),
-    ('dunn@bethel.edu', 'Dunn', 'Lawrence', 12.4),
+    ('yacste@bethel.edu', 'Yackel', 'Steven', 17.0),
+    ('dunn@bethel.edu', 'Dunn', 'Lawrence', 17.0),
     ('wilkin@bethel.edu', 'Kinney', 'William', 23.5),
-    ('huben@bethel.edu', 'Shull', 'Ben', 18.4),
-    ('alebar@bethel.edu', 'Aybar', 'Alex', 21.7),
+    ('huben@bethel.edu', 'Shull', 'Ben', 20.4),
+    ('alebar@bethel.edu', 'Aybar', 'Alex', 23.5),
     ('rutliv@bethel.edu', 'Livingston', 'Ruth', 23.8);
 
 INSERT IGNORE INTO Course (course_id, department, course_title, num_credits)

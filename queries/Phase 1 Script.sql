@@ -81,7 +81,7 @@ CREATE TABLE Section (
 	section_num INT(2) not NULL,
 	year INT(4) not NULL,
 	course_id INT(8) not NULL,
-	class_mod VARCHAR(2),
+	class_mod VARCHAR(3),
 	PRIMARY KEY (section_id),
 	FOREIGN KEY (course_id) REFERENCES Course (course_id) ON DELETE CASCADE ON UPDATE CASCADE,
 	FOREIGN KEY (class_mod) REFERENCES Timeslot (class_mod) ON DELETE SET NULL ON UPDATE CASCADE,
