@@ -36,6 +36,9 @@
       <app-input-field label="Number of Credits:" [(data)]="course.numCredits" type="number"></app-input-field>
       <button class="btn" (click)="add()">Submit</button>
       <div class="message"><label>{{ indicator }}</label></div>
+      <div class="form-container">
+        <label *ngFor="let err of formatErrors">{{err}}</label>
+      </div>
     </div>
   </div>
 
@@ -54,6 +57,9 @@
       <app-input-field label="Year:" [(data)]="courseSection.year" type="number" min="2022"></app-input-field>
       <button class="btn" (click)="add()">Submit</button>
       <div class="message"><label>{{ indicator }}</label></div>
+      <div class="form-container">
+        <label *ngFor="let err of formatErrors">{{err}}</label>
+      </div>
     </div>
   </div>
 
@@ -70,6 +76,9 @@
       <app-input-field label="Year:" [(data)]="nonInstruct.year" type="number" min="2022"></app-input-field>
       <button class="btn" (click)="add()">Submit</button>
       <div class="message"><label>{{ indicator }}</label></div>
+      <div class="form-container">
+        <label *ngFor="let err of formatErrors">{{err}}</label>
+      </div>
     </div>
   </div>
 

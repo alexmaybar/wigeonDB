@@ -224,29 +224,47 @@ export class AddPageComponent implements OnInit {
         });
       }
     } else if (this.currentType == 'course') {
-      this.cs.addCourse(this.course).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetCourse();
-        }
-        this.refreshCourse();
-      });
+      let valid = this.validateCourse(this.course);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addCourse(this.course).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetCourse();
+          }
+          this.refreshCourse();
+        });
+      }
     } else if (this.currentType == 'courseSection') {
-      this.cs.addSection(this.courseSection).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetCourseSection();
-        }
-        this.refreshSection();
-      });
+      let valid = this.validateCourseSection(this.courseSection);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addSection(this.courseSection).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetCourseSection();
+          }
+          this.refreshSection();
+        });
+      }
     } else if (this.currentType == 'nonInstruct') {
-      this.cs.addNonInstruct(this.nonInstruct).subscribe((res: any) => {
-        this.indicator = res.response;
-        if (this.indicator == 'Success') {
-          this.resetNonInstruct();
-        }
-        this.refreshNonInstruct();
-      });
+      let valid = this.validateNonInstruct(this.nonInstruct);
+      if (valid.length != 0) {
+        this.indicator = '';
+        this.formatErrors = valid;
+      } else {
+        this.cs.addNonInstruct(this.nonInstruct).subscribe((res: any) => {
+          this.indicator = res.response;
+          if (this.indicator == 'Success') {
+            this.resetNonInstruct();
+          }
+          this.refreshNonInstruct();
+        });
+      }
     }
   }
 
@@ -374,12 +392,80 @@ export class AddPageComponent implements OnInit {
   }
 
   validateInstructor(instructor: any) {
+    let emailRegEx: RegExp = /^[A-Za-z0-9+_.-]+@(.+)$/;
     let res = [];
-    if (!instructor.first_name) {
+    if (!instructor.fName) {
       res.push('First Name must not be empty');
     }
-    if (!instructor.last_name) {
+    if (!instructor.lName) {
       res.push('Last Name must not be empty');
+    }
+    if (!emailRegEx.test(instructor.email)) {
+      res.push('Invalid Email');
+    }
+    if (instructor.desiredLoad < 1 || instructor.desiredLoad > 10) {
+      res.push('Desired Load out of bounds (1-10)');
+    }
+    return res;
+  }
+
+  validateCourse(course: any) {
+    let courseIdRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let res = [];
+    if (!course.title) {
+      res.push('Course title must not be empty');
+    }
+    if (!course.department) {
+      res.push('Department must not be empty');
+    }
+    if (!courseIdRegEx.test(course.id)) {
+      res.push('Course ID must be a 4 digit code');
+    }
+    if (course.numCredits < 1 || course.numCredits > 4) {
+      res.push('Credit Number out of bounds (1-4)');
+    }
+    return res;
+  }
+
+  validateCourseSection(section: any) {
+    let yearRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let res = [];
+    if (section.sectionNum < 1) {
+      res.push('Section Number must be greater than 0');
+    }
+    if (!section.id) {
+      res.push('Course ID Required');
+    }
+    if (!section.semester) {
+      res.push('Semester Required');
+    }
+    if (!section.year) {
+      res.push('Year Required');
+    }
+    if (!yearRegEx.test(section.year)) {
+      res.push('Year must be a 4 digit number');
+    }
+    return res;
+  }
+
+  validateNonInstruct(nonInstruct: any) {
+    let yearRegEx: RegExp = /^[0-9][0-9][0-9][0-9]$/;
+    let niTeuRegEx = /[0-9]?[0-9]?(\.[0-9][0-9]?)?/;
+    let res = [];
+    if (!nonInstruct.task) {
+      res.push('Task Description Required');
+    }
+    if (niTeuRegEx.test(nonInstruct.nonInstructTeu)) {
+      res.push('Non-Instructional TEU must be a number of the form XX.XX');
+    }
+    if (!nonInstruct.semester) {
+      res.push('Semester Required');
+    }
+    if (!nonInstruct.year) {
+      res.push('Year Required');
+    }
+    if (!yearRegEx.test(nonInstruct.year)) {
+      res.push('Year must be a 4 digit number');
     }
     return res;
   }
