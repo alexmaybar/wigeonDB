@@ -10,9 +10,9 @@ const port = 3000;
 //Each user will need to enter in their username, database, and password
 //These are left blank
 const credentials = {
-  user: "ama84874",
-  database: "wigeon",
-  password: "Eagles_02",
+  user: "",
+  database: "",
+  password: "",
 };
 
 const tPool = mariadb.createPool({
